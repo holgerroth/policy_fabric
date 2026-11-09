@@ -1,0 +1,180 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1235" viewBox="0 0 1600 1235" role="img" aria-labelledby="title description">
+  <title id="title">Policy Fabric and NVFlare: deployment decisions for discussion</title>
+  <desc id="description">Logical integration responsibilities with the Policy Fabric client installed in the researcher environment. The Recipe submission hook signs, freezes and hashes the application, calls the Policy Fabric client, and attaches the returned capability before standard NVFlare submission. The client communicates with the capability issuer; issuance authority remains with Policy Fabric. The implemented client bridge uses the inference runner and trusted Script digest evidence; the standalone demo instead selects mock issuance. Both the issuer and Guardian are shown in separate dashed areas with hosting and administration unresolved. The Guardian is outside the site box to avoid assigning a location, not to select remote hosting. At each site NVFlare hashes the application, obtains a Guardian decision, and runs the job only after allow and native checks. Both configured Guardian modes currently use loopback HTTP. Neutral boxes identify deployment locations, green identifies NVFlare and integration components, and blue identifies Policy Fabric components.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#56616D"/>
+    </marker>
+    <marker id="green-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#568600"/>
+    </marker>
+    <marker id="blue-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#0072CE"/>
+    </marker>
+    <!-- Role icons: UserRound, Laptop, UserRoundCog, ShieldUser from Lucide.
+ISC License
+
+Copyright (c) 2026 Lucide Icons and Contributors
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+-->
+    <symbol id="role-person" viewBox="0 0 24 24"><g fill="none" stroke="#4D5964" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></g></symbol>
+    <symbol id="role-laptop" viewBox="0 0 24 24"><g fill="none" stroke="#4D5964" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 5a2 2 0 0 1 2 2v8.526a2 2 0 0 0 .212.897l1.068 2.127a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45l1.068-2.127A2 2 0 0 0 4 15.526V7a2 2 0 0 1 2-2z"/><path d="M20.054 15.987H3.946"/></g></symbol>
+    <symbol id="role-operator" viewBox="0 0 24 24"><g fill="none" stroke="#4D5964" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m14.305 19.53.923-.382"/><path d="m15.228 16.852-.923-.383"/><path d="m16.852 15.228-.383-.923"/><path d="m16.852 20.772-.383.924"/><path d="m19.148 15.228.383-.923"/><path d="m19.53 21.696-.382-.924"/><path d="M2 21a8 8 0 0 1 10.434-7.62"/><path d="m20.772 16.852.924-.383"/><path d="m20.772 19.148.924.383"/><circle cx="10" cy="8" r="5"/><circle cx="18" cy="18" r="3"/></g></symbol>
+    <symbol id="role-owner" viewBox="0 0 24 24"><g fill="none" stroke="#4D5964" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="M6.376 18.91a6 6 0 0 1 11.249.003"/><circle cx="12" cy="11" r="4"/></g></symbol>
+    <style>
+      text { font-family: Arial, Helvetica, sans-serif; fill: #202B33; }
+      .heading { font-size: 36px; font-weight: 700; }
+      .subtitle { font-size: 21px; fill: #4D5964; }
+      .role-title { font-size: 25px; font-weight: 700; }
+      .node-title { font-size: 23px; font-weight: 700; }
+      .body { font-size: 20px; }
+      .label { font-size: 19px; fill: #4D5964; }
+      .small { font-size: 18px; fill: #4D5964; }
+      .boundary { fill: #FAFBFC; stroke: #BCC5CC; stroke-width: 1.5; }
+      .nvflare { fill: #F1F8E6; stroke: #76B900; stroke-width: 3; }
+      .policy { fill: #EAF4FF; stroke: #0072CE; stroke-width: 3; }
+      .open-deployment { fill: #FFFFFF; stroke: #0072CE; stroke-width: 1.5; stroke-dasharray: 7 5; }
+      .open-label { font-size: 19px; font-weight: 700; fill: #005A9E; }
+      .edge { fill: none; stroke: #56616D; stroke-width: 2.5; marker-end: url(#arrow); }
+      .allow-edge { fill: none; stroke: #568600; stroke-width: 2.5; marker-end: url(#green-arrow); }
+      .decision-edge { fill: none; stroke: #0072CE; stroke-width: 2.5; marker-end: url(#blue-arrow); }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1235" fill="#FFFFFF"/>
+  <text x="50" y="57" class="heading">Policy Fabric × NVFlare</text>
+  <text x="50" y="93" class="subtitle">Researcher submits · Policy Fabric authorizes · NVFlare enforces</text>
+  <rect x="1070" y="30" width="18" height="18" rx="3" fill="#76B900"/>
+  <text x="1100" y="46" class="small">NVFlare + integration</text>
+  <rect x="1070" y="61" width="18" height="18" rx="3" fill="#0072CE"/>
+  <text x="1100" y="77" class="small">Policy Fabric components</text>
+  <rect x="1070" y="92" width="18" height="18" rx="3" class="boundary"/>
+  <text x="1100" y="108" class="small">Neutral boxes = deployment locations</text>
+
+  <!-- Locations and logical authority are deliberately labeled separately. -->
+  <rect x="50" y="140" width="460" height="440" rx="16" class="boundary"/>
+  <use href="#role-person" x="78" y="159" width="40" height="40" aria-hidden="true"/>
+  <use href="#role-laptop" x="99" y="187" width="30" height="30" aria-hidden="true"/>
+  <text x="146" y="180" class="role-title">Researcher environment</text>
+  <text x="146" y="220" class="label">Data scientist prepares and submits</text>
+
+  <rect x="620" y="140" width="440" height="440" rx="16" class="open-deployment"/>
+  <text x="650" y="180" class="role-title">Policy Fabric services</text>
+  <text x="650" y="220" class="open-label">Deployment location: OPEN</text>
+
+  <rect x="1170" y="140" width="380" height="440" rx="16" class="boundary"/>
+  <use href="#role-operator" x="1190" y="161" width="40" height="40" aria-hidden="true"/>
+  <text x="1244" y="180" class="role-title">Federation server</text>
+  <text x="1200" y="220" class="label">Operated by federation admin</text>
+
+  <!-- The logical issuer is external to researcher authority; its host is undecided. -->
+  <path d="M 275 280 V 260 H 1360 V 300" class="edge"/>
+  <text x="840" y="245" text-anchor="middle" class="label">Standard submission after hook success</text>
+
+  <rect x="80" y="280" width="400" height="110" rx="12" class="nvflare"/>
+  <text x="102" y="314" class="node-title">Recipe → PolicyProdEnv</text>
+  <text x="102" y="347" class="body">Sign → freeze ZIP → SHA-256</text>
+  <text x="102" y="376" class="small">Attach capability → sign final job</text>
+
+  <!-- The installed Policy Fabric client mediates the issuer exchange. -->
+  <path d="M 200 390 V 450" class="edge"/>
+  <text x="180" y="411" text-anchor="end" class="small">Digest +</text>
+  <text x="180" y="434" text-anchor="end" class="small">request</text>
+  <path d="M 360 450 V 390" class="decision-edge"/>
+  <text x="378" y="425" class="small">Capability</text>
+
+  <rect x="80" y="450" width="400" height="100" rx="12" class="policy"/>
+  <text x="102" y="484" class="node-title">Policy Fabric client</text>
+  <text x="102" y="513" class="body">Installed in researcher environment</text>
+  <text x="102" y="538" class="small">InferenceGuardianActionRunner</text>
+
+  <path d="M 480 475 H 650" class="edge"/>
+  <text x="565" y="459" text-anchor="middle" class="small">Request</text>
+  <path d="M 650 530 H 480" class="decision-edge"/>
+  <text x="565" y="514" text-anchor="middle" class="label">Capability</text>
+
+  <rect x="650" y="285" width="380" height="95" rx="12" class="policy"/>
+  <text x="672" y="319" class="node-title">Trusted authorities</text>
+  <text x="672" y="350" class="body">Attest approved ZIP digest + facts</text>
+  <path d="M 840 380 V 405" class="decision-edge"/>
+
+  <rect x="650" y="405" width="380" height="145" rx="12" class="policy"/>
+  <text x="672" y="439" class="node-title">Policy agent + token</text>
+  <text x="672" y="472" class="body">Evaluate policy; issue capability</text>
+  <text x="672" y="505" class="open-label">Hosting / operator: TO AGREE</text>
+  <text x="672" y="534" class="small">Trusted digest + required evidence</text>
+
+  <rect x="1200" y="300" width="320" height="155" rx="12" class="nvflare"/>
+  <text x="1222" y="334" class="node-title">NVFlare server</text>
+  <text x="1222" y="367" class="body">Route by registered asset DID</text>
+  <text x="1222" y="400" class="body">Preserve application ZIP bytes</text>
+  <text x="1222" y="433" class="small">Distribute job + capability</text>
+
+  <g transform="translate(0 95)">
+  <rect x="50" y="550" width="990" height="350" rx="16" class="boundary"/>
+  <use href="#role-owner" x="80" y="573" width="44" height="44" aria-hidden="true"/>
+  <text x="146" y="595" class="role-title">Data-owner site</text>
+  <text x="146" y="626" class="label">NVFlare client and application execution</text>
+
+  <!-- Unassigned location: this separate area does not select remote hosting. -->
+  <rect x="1170" y="550" width="380" height="350" rx="16" class="open-deployment"/>
+  <text x="1200" y="595" class="role-title">Policy Fabric Guardian</text>
+  <text x="1200" y="626" class="open-label">Deployment location: OPEN</text>
+
+  <path d="M 1360 360 V 520 H 27 V 785 H 80" class="edge"/>
+  <text x="800" y="507" text-anchor="middle" class="label">Distribute to each participating data-owner site</text>
+
+  <!-- Requests and replies cross logical roles without choosing a transport. -->
+  <path d="M 390 710 V 675 H 1360 V 710" class="edge"/>
+  <text x="870" y="661" text-anchor="middle" class="label">Capability + measured digest</text>
+  <path d="M 1360 860 V 884 H 290 V 860" class="decision-edge"/>
+  <text x="1105" y="869" text-anchor="middle" class="small">Allow / deny</text>
+
+  <!-- Only the local NVFlare client launches the job after all checks pass. -->
+  <path d="M 500 785 H 650" class="allow-edge"/>
+  <text x="575" y="746" text-anchor="middle" class="small">Allow +</text>
+  <text x="575" y="771" text-anchor="middle" class="small">native checks</text>
+
+  <rect x="80" y="710" width="420" height="150" rx="12" class="nvflare"/>
+  <text x="102" y="744" class="node-title">NVFlare client + plugins</text>
+  <text x="102" y="777" class="body">Check capability route and asset DID</text>
+  <text x="102" y="810" class="body">Hash received ZIP before unpacking</text>
+  <text x="102" y="844" class="small">Deny, timeout or invalid response → stop</text>
+
+  <rect x="650" y="710" width="350" height="150" rx="12" class="nvflare"/>
+  <text x="672" y="744" class="node-title">NVFlare job process</text>
+  <text x="672" y="777" class="body">Execute approved application</text>
+  <text x="672" y="810" class="body">Return FL results</text>
+  <text x="672" y="844" class="small">Launched by the local client</text>
+
+  <rect x="1200" y="710" width="320" height="150" rx="12" class="policy"/>
+  <text x="1222" y="744" class="node-title">Guardian</text>
+  <text x="1222" y="777" class="body">Verify capability and digest</text>
+  <text x="1222" y="810" class="open-label">Hosting / operator: OPEN</text>
+  <text x="1222" y="844" class="small">PDO decision; explicit mock mode</text>
+
+  <!-- General discussion questions; neither deployment is decided. -->
+  <rect x="50" y="930" width="1500" height="145" rx="12" fill="#F3F8FE" stroke="#0072CE" stroke-width="1.5"/>
+  <text x="80" y="963" class="node-title">Open discussion: Policy Fabric deployment</text>
+  <line x1="790" y1="982" x2="790" y2="1055" stroke="#BACDDF" stroke-width="1"/>
+  <text x="80" y="998" class="node-title">Capability issuer</text>
+  <text x="80" y="1027" class="body">Who hosts it and controls policy updates and issuance keys?</text>
+  <text x="80" y="1055" class="small">Separate authority from the researcher; hosting remains open.</text>
+  <text x="820" y="998" class="node-title">Guardian</text>
+  <text x="820" y="1027" class="body">Local at each site or hosted elsewhere? Who operates it?</text>
+  <text x="820" y="1055" class="small">Agree key management, software updates and the trust boundary.</text>
+
+  <text x="50" y="1110" class="small">Dashed areas leave hosting open; they do not imply remote services. Client/PDO bridge implemented; standalone validation uses explicit mocks.</text>
+  </g>
+</svg>

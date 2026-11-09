@@ -13,6 +13,15 @@ The devcontainer brings up the policy engine, registries, and webapp; open the f
 - **[Download](https://docs.mlcommons.org/policy_fabric/tutorial/)** — data leaves, encrypted to a requester the policy checked. Start here.
 - **[Inference](https://docs.mlcommons.org/policy_fabric/tutorial_inference/)** — data stays put and approved code comes to it, at two hospitals at once.
 
+## Integration example
+
+[NVFlare job authorization](tools/dev/nvflare_poc/README.md) connects standard
+Recipes and site deployment checks to the Policy Fabric client and inference
+Guardian. Includes a [design schematic](tools/dev/nvflare_poc/DESIGN.md), a
+self-contained secure-federation demo with explicit mocks, and validation notes.
+This example targets the `authorities` development APIs; full PDO-backed
+NVFlare end-to-end validation remains pending.
+
 ## Layout
 
 ```

@@ -1,0 +1,21 @@
+{
+  "user_name": "researcher",
+  "targets": [
+    {
+      "asset_did": "did:pdo:replace-with-site-a-data-asset",
+      "app_name": "app_site_a",
+      "wallets": {
+        "User": "replace-with-researcher-wallet-id",
+        "Script": "replace-with-approved-archive-asset-wallet-id"
+      }
+    },
+    {
+      "asset_did": "did:pdo:replace-with-site-b-data-asset",
+      "app_name": "app_site_b",
+      "wallets": {
+        "User": "replace-with-researcher-wallet-id",
+        "Script": "replace-with-approved-archive-asset-wallet-id"
+      }
+    }
+  ]
+}
