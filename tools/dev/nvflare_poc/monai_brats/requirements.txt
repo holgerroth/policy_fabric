@@ -1,0 +1,10 @@
+# Tested together on H100; the base PoC's NumPy-only environment is separate.
+nvflare==2.9.1
+monai==1.4.0
+torch==2.6.0
+numpy==1.26.4
+pytorch-ignite==0.4.13
+nibabel==5.3.2
+tensorboard==2.20.0
+huggingface_hub>=0.28,<1
+pytest>=8,<10
