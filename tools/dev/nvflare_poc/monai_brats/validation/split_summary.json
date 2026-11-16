@@ -1,0 +1,78 @@
+{
+  "dataset_root": "/scratch/hroth/Code/nvflare/policy-fabric-brats-20261116-jjiBqg/data/Task01_BrainTumour",
+  "dataset": "BRATS",
+  "dataset_source": "https://msd-for-monai.s3-us-west-2.amazonaws.com/Task01_BrainTumour.tar",
+  "archive_md5": "240a19d752f0d9e9101544901065d872",
+  "available_labeled_cases": 484,
+  "seed": 2026,
+  "input_modalities": {
+    "0": "FLAIR",
+    "1": "T1w",
+    "2": "t1gd",
+    "3": "T2w"
+  },
+  "input_labels": {
+    "0": "background",
+    "1": "edema",
+    "2": "non-enhancing tumor",
+    "3": "enhancing tumour"
+  },
+  "bundle_channel_indices": [
+    2,
+    1,
+    3,
+    0
+  ],
+  "output_regions": {
+    "TC": [
+      2,
+      3
+    ],
+    "WT": [
+      1,
+      2,
+      3
+    ],
+    "ET": [
+      3
+    ]
+  },
+  "sites": {
+    "site_a": {
+      "training": {
+        "count": 4,
+        "cases": [
+          "BRATS_464.nii.gz",
+          "BRATS_209.nii.gz",
+          "BRATS_322.nii.gz",
+          "BRATS_400.nii.gz"
+        ]
+      },
+      "validation": {
+        "count": 2,
+        "cases": [
+          "BRATS_083.nii.gz",
+          "BRATS_272.nii.gz"
+        ]
+      }
+    },
+    "site_b": {
+      "training": {
+        "count": 4,
+        "cases": [
+          "BRATS_440.nii.gz",
+          "BRATS_176.nii.gz",
+          "BRATS_445.nii.gz",
+          "BRATS_334.nii.gz"
+        ]
+      },
+      "validation": {
+        "count": 2,
+        "cases": [
+          "BRATS_213.nii.gz",
+          "BRATS_125.nii.gz"
+        ]
+      }
+    }
+  }
+}

@@ -13,6 +13,11 @@ new request-digest/authority APIs; these are ahead of upstream `main`.
 [Design and team schematic](DESIGN.md) · [Validation evidence](VALIDATION.md) ·
 [Potential NVFlare core hook](NVFLARE_HOOK_PROPOSAL.md)
 
+For a GPU application workload, see the
+[MONAI BraTS segmentation example](monai_brats/README.md): a published MONAI
+bundle and MSD dataset on NVFlare 2.9.1, using the same submission and
+authorization integration.
+
 ## What is implemented
 
 | Piece | Implementation |

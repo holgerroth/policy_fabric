@@ -1,0 +1,219 @@
+{
+  "nvflare_version": "2.9.1",
+  "bundle": "MONAI/brats_mri_segmentation@0.5.4",
+  "mock_guardian": true,
+  "submission": "Recipe.execute(PolicyProdEnv)",
+  "rounds": 2,
+  "local_epochs": 1,
+  "gpus": [
+    "0",
+    "1"
+  ],
+  "cases": {
+    "allowed": {
+      "job_id": "a31cd8c8-6b10-4728-9268-c35eb93e2a85",
+      "status": "FINISHED:COMPLETED",
+      "executed": [
+        "a31cd8c8-6b10-4728-9268-c35eb93e2a85-site_a.txt",
+        "a31cd8c8-6b10-4728-9268-c35eb93e2a85-site_b.txt"
+      ],
+      "approved_digests": {
+        "app_site_a": "sha256:080d1987d4d9735d8060771c6176996dd687bae51d1300fb1bf69bb311de1718",
+        "app_site_b": "sha256:977a651a86045e6550d2ae19f6b8856e1706f3a7ade25c4cc23121a065d5d60c"
+      },
+      "deploy_detail": [
+        "server: OK",
+        "site_a: OK",
+        "site_b: OK"
+      ],
+      "schedule_history": [
+        "2026-11-16 10:47:42: scheduled"
+      ],
+      "registered_assets": {
+        "site_a": "did:pdo:asset-a",
+        "site_b": "did:pdo:asset-b"
+      },
+      "clients": [
+        {
+          "site": "site_a",
+          "job_id": "a31cd8c8-6b10-4728-9268-c35eb93e2a85",
+          "script_path": "/scratch/hroth/Code/nvflare/policy-fabric-brats-20261116-jjiBqg/run04/workspace/policy-fabric-poc/prod_00/site_a/a31cd8c8-6b10-4728-9268-c35eb93e2a85/app_site_a/custom/client.py",
+          "gpu": "NVIDIA H100 NVL",
+          "train_cases": 4,
+          "validation_cases": 2,
+          "rounds": [
+            {
+              "round": 0,
+              "global_validation": {
+                "val_mean_dice": 0.7687431573867798,
+                "val_mean_dice_tc": 0.6976322531700134,
+                "val_mean_dice_wt": 0.8644375205039978,
+                "val_mean_dice_et": 0.7441598176956177
+              },
+              "training_steps": 4
+            },
+            {
+              "round": 1,
+              "global_validation": {
+                "val_mean_dice": 0.7683428525924683,
+                "val_mean_dice_tc": 0.7218707203865051,
+                "val_mean_dice_wt": 0.8654009699821472,
+                "val_mean_dice_et": 0.717756986618042
+              },
+              "training_steps": 4
+            }
+          ]
+        },
+        {
+          "site": "site_b",
+          "job_id": "a31cd8c8-6b10-4728-9268-c35eb93e2a85",
+          "script_path": "/scratch/hroth/Code/nvflare/policy-fabric-brats-20261116-jjiBqg/run04/workspace/policy-fabric-poc/prod_00/site_b/a31cd8c8-6b10-4728-9268-c35eb93e2a85/app_site_b/custom/client.py",
+          "gpu": "NVIDIA H100 NVL",
+          "train_cases": 4,
+          "validation_cases": 2,
+          "rounds": [
+            {
+              "round": 0,
+              "global_validation": {
+                "val_mean_dice": 0.7828071713447571,
+                "val_mean_dice_tc": 0.7939764261245728,
+                "val_mean_dice_wt": 0.872836172580719,
+                "val_mean_dice_et": 0.6816089153289795
+              },
+              "training_steps": 4
+            },
+            {
+              "round": 1,
+              "global_validation": {
+                "val_mean_dice": 0.809776782989502,
+                "val_mean_dice_tc": 0.8251059651374817,
+                "val_mean_dice_wt": 0.8693050742149353,
+                "val_mean_dice_et": 0.7349191904067993
+              },
+              "training_steps": 4
+            }
+          ]
+        }
+      ],
+      "checkpoint": "/scratch/hroth/Code/nvflare/policy-fabric-brats-20261116-jjiBqg/run04/workspace/policy-fabric-poc/prod_00/admin@example.org/transfer/a31cd8c8-6b10-4728-9268-c35eb93e2a85/workspace/app_server/FL_global_model.pt",
+      "result_path": "/scratch/hroth/Code/nvflare/policy-fabric-brats-20261116-jjiBqg/run04/workspace/policy-fabric-poc/prod_00/admin@example.org/transfer/a31cd8c8-6b10-4728-9268-c35eb93e2a85"
+    },
+    "tampered": {
+      "job_id": "d619f7fc-ab2c-463a-ba34-46ef48c2e756",
+      "status": "FINISHED:FAILED_TO_RUN",
+      "executed": [],
+      "approved_digests": {
+        "app_site_a": "sha256:95933649bcd714e512dab1057287b3cbd57e4e566c2382f9fe417290627d5aec",
+        "app_site_b": "sha256:2dbf3b1ced9708650534f444d1e93725d2e155c6ecc4ccbff5dd8c138daf144f"
+      },
+      "deploy_detail": [
+        "server: OK",
+        "site_a: NVFLARE_ERROR: Policy Fabric denied deployment: Guardian denied request: HTTP 422",
+        "site_b: NVFLARE_ERROR: Policy Fabric denied deployment: Guardian denied request: HTTP 422",
+        "num_ok_sites 0 < required_min_sites 2"
+      ],
+      "schedule_history": null
+    },
+    "missing-capability": {
+      "job_id": "94bb5bdc-84ca-43d9-bbce-f3e325f3ff90",
+      "status": "FINISHED:CAN_NOT_SCHEDULE",
+      "executed": [],
+      "approved_digests": {
+        "app_site_a": "sha256:6c3e6b06507200089fa9ccc56e75f7957d374ddd4a380ce7e22d304f86c1fba4",
+        "app_site_b": "sha256:697e52d2f3a241854bf84895986b28ad6e48a196960ec65d921eff7c3c89ffa3"
+      },
+      "deploy_detail": null,
+      "schedule_history": [
+        "2026-11-16 10:48:30: not enough sites have enough resources (ok sites 1 < min sites 2). Details: site_b: Policy Fabric: missing capability for this site",
+        "2026-11-16 10:48:31: not enough sites have enough resources (ok sites 1 < min sites 2). Details: site_b: Policy Fabric: missing capability for this site",
+        "2026-11-16 10:48:32: exceeded max schedule count 2"
+      ]
+    },
+    "guardian-unavailable": {
+      "job_id": "c5a64816-1b54-4b37-9664-2f1044422109",
+      "status": "FINISHED:FAILED_TO_RUN",
+      "executed": [],
+      "approved_digests": {
+        "app_site_a": "sha256:c31d432fc6db09e6cd700277d16a70900758981a3cc3974cfbe2722e39f92414",
+        "app_site_b": "sha256:0ae36cf21202dbd49162be011c0d4dddb7fe93f89d9f20c297742a0a95a731fd"
+      },
+      "deploy_detail": [
+        "server: OK",
+        "site_a: NVFLARE_ERROR: Policy Fabric denied deployment: Guardian unavailable or invalid response (URLError)",
+        "site_b: NVFLARE_ERROR: Policy Fabric denied deployment: Guardian unavailable or invalid response (URLError)",
+        "num_ok_sites 0 < required_min_sites 2"
+      ],
+      "schedule_history": null
+    }
+  },
+  "final_evaluation": {
+    "checkpoint": "/scratch/hroth/Code/nvflare/policy-fabric-brats-20261116-jjiBqg/run04/workspace/policy-fabric-poc/prod_00/admin@example.org/transfer/a31cd8c8-6b10-4728-9268-c35eb93e2a85/workspace/app_server/FL_global_model.pt",
+    "parameter_change_l2": 0.39634875348857534,
+    "mean_dice": {
+      "TC": 0.7572285085916519,
+      "WT": 0.8654774278402328,
+      "ET": 0.7172191441059113
+    },
+    "mean_dice_all_regions": 0.779975026845932,
+    "cases": [
+      {
+        "case": "BRATS_083.nii.gz",
+        "dice": {
+          "TC": 0.92537522315979,
+          "WT": 0.8477229475975037,
+          "ET": 0.8588239550590515
+        },
+        "shape": [
+          240,
+          240,
+          155
+        ],
+        "prediction": "/scratch/hroth/Code/nvflare/policy-fabric-brats-20261116-jjiBqg/run04/evaluation/BRATS_083_prediction.nii.gz"
+      },
+      {
+        "case": "BRATS_213.nii.gz",
+        "dice": {
+          "TC": 0.6787377595901489,
+          "WT": 0.8167396783828735,
+          "ET": 0.698228657245636
+        },
+        "shape": [
+          240,
+          240,
+          155
+        ],
+        "prediction": "/scratch/hroth/Code/nvflare/policy-fabric-brats-20261116-jjiBqg/run04/evaluation/BRATS_213_prediction.nii.gz"
+      },
+      {
+        "case": "BRATS_272.nii.gz",
+        "dice": {
+          "TC": 0.5318559408187866,
+          "WT": 0.8893759250640869,
+          "ET": 0.5316901206970215
+        },
+        "shape": [
+          240,
+          240,
+          155
+        ],
+        "prediction": "/scratch/hroth/Code/nvflare/policy-fabric-brats-20261116-jjiBqg/run04/evaluation/BRATS_272_prediction.nii.gz"
+      },
+      {
+        "case": "BRATS_125.nii.gz",
+        "dice": {
+          "TC": 0.8929451107978821,
+          "WT": 0.9080711603164673,
+          "ET": 0.780133843421936
+        },
+        "shape": [
+          240,
+          240,
+          155
+        ],
+        "prediction": "/scratch/hroth/Code/nvflare/policy-fabric-brats-20261116-jjiBqg/run04/evaluation/BRATS_125_prediction.nii.gz"
+      }
+    ],
+    "note": "Small integration pilot; pretrained BraTS model may overlap MSD cases. Not an independent accuracy benchmark."
+  },
+  "passed": true
+}

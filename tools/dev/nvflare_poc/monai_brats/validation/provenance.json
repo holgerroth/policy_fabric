@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-16",
+  "hostname": "r1u14",
+  "python": "3.11.15",
+  "torch": "2.6.0+cu124",
+  "monai": "1.4.0",
+  "nvflare": "2.9.1",
+  "cuda": "12.4",
+  "gpu": "NVIDIA H100 NVL",
+  "source_base_commit": "4e137ff0352d98651492dadaf37b3729f57f852a",
+  "nvflare_release_commit": "5f2250f1cd63ca2b3aff1952d950e3c3e9af5496",
+  "bundle_id": "MONAI/brats_mri_segmentation",
+  "bundle_version": "0.5.4",
+  "bundle_files_sha256": {
+    "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "configs/evaluate.json": "e36c4f1e9525303193fd7b22a0881c638135749375204d023801e0de9fa8489a",
+    "configs/inference.json": "22dead767f9bfcd6e3e7cbf5353ef1641e52f37acd9a20cc346361c1e603cf9e",
+    "configs/inference_trt.json": "53574daf07069187c80e658408bbb349be4b3e6c2185ba00b29b2fa0279355cd",
+    "configs/logging.conf": "f6e88ab39700a754dc09ae95be68d9fa2663611f0e5437b99c6d4afee4e81a0d",
+    "configs/metadata.json": "65322a60a2a3cd49ae773a20f6b3a1bfc25baa906e5bfe784f5fb4557503dc96",
+    "configs/multi_gpu_train.json": "5b11eb58cb8e63bab7053b9cefc45befde25c8bd45cb0869009d8398173657bd",
+    "configs/train.json": "61e1468d4db8558ebe80d90ebdc8f93bd313261d23387c7a10a10dd7cc746ddb",
+    "docs/README.md": "0880c48d620c5e851d85d4070c103c474b3f67b494e64ab499a3fdd1f2865f54",
+    "docs/data_license.txt": "a0270a84a9009b2a6a3e281e1767bc33bb78167d6c7af7329d95b27a8aca7485",
+    "models/model.pt": "860ccb3f1c21c99d0410ad8a1ac4ef6b8fab60cec0a503b0ba42675741a750ae",
+    "scripts/prepare_datalist.py": "6bef778380d3ceffb0e6416b9fdcd178f0d56a43bbd1750c7b531871344c2a61"
+  },
+  "source_files_sha256": {
+    "tools/dev/nvflare_poc/monai_brats/bundle_config.py": "47d4c6bc731cbb1957d73d8d61423f50e1d2142d1bef39848a6b48ecce696c3c",
+    "tools/dev/nvflare_poc/monai_brats/client.py": "3393e6200fc43ecde2c0c84b40f60b0d0ab345bd28b88c47b769b7de2f9e8cb1",
+    "tools/dev/nvflare_poc/monai_brats/evaluate.py": "d353e246c5847d25c5b52b7dba7f2a0170fe3a81b6af27e88056b73a268baf97",
+    "tools/dev/nvflare_poc/monai_brats/job.py": "e4c314361bd68af17527e132ec78e8c5a47b4dbbd7e9f03fbd4332c112a3de4d",
+    "tools/dev/nvflare_poc/monai_brats/msd_transforms.py": "b7e5bb62cf0246ee7f18c7724416c6c5fb2fb022a50f3cbafbb2a748f82d23a4",
+    "tools/dev/nvflare_poc/monai_brats/prepare_data.py": "d98965b57ef0f5134ee34aaec852e1e50485852c6282b8fd50610a2e8c0f0a95",
+    "tools/dev/nvflare_poc/monai_brats/run_e2e.py": "76428477cb3850a3e1f364bc6f28b33a9809849c76459e65fffb49eab1ce3f0d",
+    "tools/dev/nvflare_poc/monai_brats/test_data.py": "a8a6392bfd4d1ce43849406cb8b7f0d13a2a5ed5c94fb3e5503de4791a820bd1"
+  },
+  "output_root": "/scratch/hroth/Code/nvflare/policy-fabric-brats-20261116-jjiBqg/run04"
+}

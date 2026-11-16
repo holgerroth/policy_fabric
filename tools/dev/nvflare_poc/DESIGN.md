@@ -273,3 +273,16 @@ The original PoC and its local design work were checkpointed on
 from the new repository's history and carries only the integration example and
 its documentation forward. The earlier validation and issue draft remain as
 explicitly labeled historical records.
+
+## First application PoC
+
+- [x] **Holger:** Prepare a standard MONAI-based brain tumor segmentation job
+  for NVFlare and integrate it with the Policy Fabric authorization flow for
+  the first application PoC. Added 2026-11-12; implemented and validated on
+  H100 on 2026-11-16 with NVFlare 2.9.1, the published BraTS SegResNet bundle,
+  and MSD data. Two-site training/inference and three rejection cases passed
+  using explicit mock Guardians. See the [example](monai_brats/README.md) and
+  [validation evidence](monai_brats/VALIDATION.md).
+- [ ] Validate the same workload with live Policy Fabric credentials,
+  encrypted capabilities and real Guardians. The mock run does not complete
+  this production trust validation.
