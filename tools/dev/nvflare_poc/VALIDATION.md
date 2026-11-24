@@ -1,5 +1,77 @@
 # Local validation
 
+## Consolidated main migration — 2026-11-24
+
+**Passed:** the migrated contract tests, secure two-site MONAI training,
+aggregation, final inference, all three authorization rejection cases, and the
+approval-export CLI. Base: `mlcommons/policy_fabric` consolidated
+[`main@d1fddd7`](https://github.com/mlcommons/policy_fabric/commit/d1fddd767e37b019df965b6bd707b3d9d473c96f).
+Only the NVFlare integration commits were replayed onto this base. The previous
+validated version is preserved on `feat/nvflare-authorities-20261124`.
+
+The capability bridge now calls main's actual `InferenceGuardianActionRunner`
+with the selected role wallets. Main obtains the authorized digest from the
+Script credential; it has no issuance `request.script_digest` parameter or
+authorities-branch readiness API. Unsupported target settings are rejected.
+Tests preserve session-key credential failures and policy refusals, and exercise
+the actual upstream Guardian operation against matching and mismatched digests.
+PDO/ledger/cryptographic services are stubbed in those contract tests.
+
+Runtime: H100 node `r1u14`, GPUs 0 and 1, dedicated Python 3.11.15 environment,
+NVFlare **2.9.1**, MONAI **1.4.0**, PyTorch **2.6.0+cu124**. The existing verified
+MSD data, deterministic splits and published BraTS bundle **0.5.4** were reused.
+No installed framework source was patched.
+
+- E2E source commit: `af4b38009910d4f479a3626d7c9945a0da7bdc9f`; exit code **0**.
+- Final test/CLI source commit: `331ae840a57156fa2d65db687f08f662bdba1014`.
+  This follow-up changes the freeze-only destination option, its regression
+  test and documentation; training functions are unchanged.
+- Final suite: **66 passed**, with four expected secret-scan warnings about
+  mock capability strings in existing submission tests.
+- Black, isort and Git whitespace checks passed. The updated NVIDIA-green /
+  Policy-Fabric-blue schematic was rendered and visually checked.
+
+| Case | Job ID | Result | Client executions |
+| --- | --- | --- | ---: |
+| Allowed | `0d1066b8-6c79-48cc-a5db-eae66fbf0c49` | `FINISHED:COMPLETED` | 2 |
+| Tampered ZIP | `b45dfeeb-61ad-44fd-a665-9f0b8da2c8c8` | `FINISHED:FAILED_TO_RUN`; Guardian HTTP 422 | 0 |
+| Missing capability | `1f1ca4d7-af86-4c0d-b989-439d6f2f0489` | `FINISHED:CAN_NOT_SCHEDULE` | 0 |
+| Guardian unavailable | `6171f115-4623-4bbf-8f3e-9511e76ca5f5` | `FINISHED:FAILED_TO_RUN` | 0 |
+
+Both sites completed two FedAvg rounds, one local epoch per round, four training
+subjects and two validation subjects per site. The final aggregate differs from
+the pretrained checkpoint (parameter-change L2 **0.396334**) and produces four
+full-volume prediction NIfTIs. Final mean Dice: **TC 0.7573, WT 0.8655, ET 0.7175;
+overall 0.7801**. These are functional integration scores, not an independent
+accuracy benchmark: the pretrained BraTS bundle may overlap MSD subjects.
+
+The real-bundle `job.py --freeze-only --freeze-dir ...` check produced signed
+frozen ZIPs in the requested folder. A second-stage `--authorize-only` operation
+with explicit mock capabilities left both ZIP hashes unchanged. The CLI regression
+test also verifies that a repeated export fails without overwriting the artifacts.
+The option deliberately avoids NVFlare's reserved `--export-dir` flag.
+
+Evidence: [results](validation/main-20261124-results.json) and
+[source/runtime provenance](validation/main-20261124-provenance.json).
+Dedicated H100 output root:
+
+```text
+/scratch/hroth/Code/nvflare/policy-fabric-main-20261124-naNhX4
+```
+
+`logs/e2e.log`, `logs/tests-final.log`, `logs/freeze-final.log` and
+`logs/authorize-frozen.log` contain the execution evidence. `run01/` contains
+the signed submissions, site reports, final checkpoint and prediction volumes;
+`frozen-jobs/monai_brats/` contains the separate approval export. The run's
+federation/Guardian processes were stopped, with all four GPUs idle afterward.
+Generated keys and large data/model artifacts remain on H100 and are not committed.
+
+**Validation boundary:** the federation, signed jobs, training and inference are
+real; E2E capability issuance and Guardians are explicitly mocked. A complete
+trusted credential → live policy → encrypted capability → real Guardian →
+NVFlare execution flow remains pending. Main's provider cannot confirm the
+encrypted operation's digest at issuance; the site Guardian performs that check.
+
 ## MLCommons repository migration — 2026-11-09
 
 Base: `mlcommons/policy_fabric`, `authorities@31776f3df799047d001067271a1155e21bda1cc4`.

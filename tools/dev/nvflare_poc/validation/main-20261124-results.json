@@ -1,0 +1,219 @@
+{
+  "nvflare_version": "2.9.1",
+  "bundle": "MONAI/brats_mri_segmentation@0.5.4",
+  "mock_guardian": true,
+  "submission": "Recipe.execute(PolicyProdEnv)",
+  "rounds": 2,
+  "local_epochs": 1,
+  "gpus": [
+    "0",
+    "1"
+  ],
+  "cases": {
+    "allowed": {
+      "job_id": "0d1066b8-6c79-48cc-a5db-eae66fbf0c49",
+      "status": "FINISHED:COMPLETED",
+      "executed": [
+        "0d1066b8-6c79-48cc-a5db-eae66fbf0c49-site_a.txt",
+        "0d1066b8-6c79-48cc-a5db-eae66fbf0c49-site_b.txt"
+      ],
+      "approved_digests": {
+        "app_site_a": "sha256:c676455b4d93dd080a9ab897254d61eb728e10043f6687422d10fbfacd1e1842",
+        "app_site_b": "sha256:ccff3d4a627f5fc0004dd1f3bdd9d1940b7ce6d3703f402c1786ac1ae25cb2bd"
+      },
+      "deploy_detail": [
+        "server: OK",
+        "site_a: OK",
+        "site_b: OK"
+      ],
+      "schedule_history": [
+        "2026-11-24 13:06:08: scheduled"
+      ],
+      "registered_assets": {
+        "site_a": "did:pdo:asset-a",
+        "site_b": "did:pdo:asset-b"
+      },
+      "clients": [
+        {
+          "site": "site_a",
+          "job_id": "0d1066b8-6c79-48cc-a5db-eae66fbf0c49",
+          "script_path": "/scratch/hroth/Code/nvflare/policy-fabric-main-20261124-naNhX4/run01/workspace/policy-fabric-poc/prod_00/site_a/0d1066b8-6c79-48cc-a5db-eae66fbf0c49/app_site_a/custom/client.py",
+          "gpu": "NVIDIA H100 NVL",
+          "train_cases": 4,
+          "validation_cases": 2,
+          "rounds": [
+            {
+              "round": 0,
+              "global_validation": {
+                "val_mean_dice": 0.7687431573867798,
+                "val_mean_dice_tc": 0.6976322531700134,
+                "val_mean_dice_wt": 0.8644375205039978,
+                "val_mean_dice_et": 0.7441598176956177
+              },
+              "training_steps": 4
+            },
+            {
+              "round": 1,
+              "global_validation": {
+                "val_mean_dice": 0.7684940695762634,
+                "val_mean_dice_tc": 0.7221011519432068,
+                "val_mean_dice_wt": 0.8653956651687622,
+                "val_mean_dice_et": 0.7179853320121765
+              },
+              "training_steps": 4
+            }
+          ]
+        },
+        {
+          "site": "site_b",
+          "job_id": "0d1066b8-6c79-48cc-a5db-eae66fbf0c49",
+          "script_path": "/scratch/hroth/Code/nvflare/policy-fabric-main-20261124-naNhX4/run01/workspace/policy-fabric-poc/prod_00/site_b/0d1066b8-6c79-48cc-a5db-eae66fbf0c49/app_site_b/custom/client.py",
+          "gpu": "NVIDIA H100 NVL",
+          "train_cases": 4,
+          "validation_cases": 2,
+          "rounds": [
+            {
+              "round": 0,
+              "global_validation": {
+                "val_mean_dice": 0.7828071713447571,
+                "val_mean_dice_tc": 0.7939764261245728,
+                "val_mean_dice_wt": 0.872836172580719,
+                "val_mean_dice_et": 0.6816089153289795
+              },
+              "training_steps": 4
+            },
+            {
+              "round": 1,
+              "global_validation": {
+                "val_mean_dice": 0.8097814321517944,
+                "val_mean_dice_tc": 0.8251234292984009,
+                "val_mean_dice_wt": 0.8693070411682129,
+                "val_mean_dice_et": 0.7349135875701904
+              },
+              "training_steps": 4
+            }
+          ]
+        }
+      ],
+      "checkpoint": "/scratch/hroth/Code/nvflare/policy-fabric-main-20261124-naNhX4/run01/workspace/policy-fabric-poc/prod_00/admin@example.org/transfer/0d1066b8-6c79-48cc-a5db-eae66fbf0c49/workspace/app_server/FL_global_model.pt",
+      "result_path": "/scratch/hroth/Code/nvflare/policy-fabric-main-20261124-naNhX4/run01/workspace/policy-fabric-poc/prod_00/admin@example.org/transfer/0d1066b8-6c79-48cc-a5db-eae66fbf0c49"
+    },
+    "tampered": {
+      "job_id": "b45dfeeb-61ad-44fd-a665-9f0b8da2c8c8",
+      "status": "FINISHED:FAILED_TO_RUN",
+      "executed": [],
+      "approved_digests": {
+        "app_site_a": "sha256:6a2d751180cb91e06ac6ca36e03785e7880d05f18ae51d62e6fe387d71fa2e13",
+        "app_site_b": "sha256:0ed685eb085d91a24a49c1b5c35fa64ad48eabd066b9ef349871fde9beb14bba"
+      },
+      "deploy_detail": [
+        "server: OK",
+        "site_a: NVFLARE_ERROR: Policy Fabric denied deployment: Guardian denied request: HTTP 422",
+        "site_b: NVFLARE_ERROR: Policy Fabric denied deployment: Guardian denied request: HTTP 422",
+        "num_ok_sites 0 < required_min_sites 2"
+      ],
+      "schedule_history": null
+    },
+    "missing-capability": {
+      "job_id": "1f1ca4d7-af86-4c0d-b989-439d6f2f0489",
+      "status": "FINISHED:CAN_NOT_SCHEDULE",
+      "executed": [],
+      "approved_digests": {
+        "app_site_a": "sha256:6a28c247e3b0f1adb2482207750d36a9bb90fb26bdcc37874df136db89f5b595",
+        "app_site_b": "sha256:8d1168467f9c24f8ef77b51da40519887fa5bab80c4b27b83de5a4ea0dd269f9"
+      },
+      "deploy_detail": null,
+      "schedule_history": [
+        "2026-11-24 13:06:57: not enough sites have enough resources (ok sites 1 < min sites 2). Details: site_b: Policy Fabric: missing capability for this site",
+        "2026-11-24 13:06:58: not enough sites have enough resources (ok sites 1 < min sites 2). Details: site_b: Policy Fabric: missing capability for this site",
+        "2026-11-24 13:06:59: exceeded max schedule count 2"
+      ]
+    },
+    "guardian-unavailable": {
+      "job_id": "6171f115-4623-4bbf-8f3e-9511e76ca5f5",
+      "status": "FINISHED:FAILED_TO_RUN",
+      "executed": [],
+      "approved_digests": {
+        "app_site_a": "sha256:86a9d8982d5efff8e78a323654fe85a6e385c7fdb3b744eb7445a3603dbc5983",
+        "app_site_b": "sha256:332de9270c9fcad92bbe1df5a3afec2d2568d5398c28c6d438c8dff91e8c9204"
+      },
+      "deploy_detail": [
+        "server: OK",
+        "site_a: NVFLARE_ERROR: Policy Fabric denied deployment: Guardian unavailable or invalid response (URLError)",
+        "site_b: NVFLARE_ERROR: Policy Fabric denied deployment: Guardian unavailable or invalid response (URLError)",
+        "num_ok_sites 0 < required_min_sites 2"
+      ],
+      "schedule_history": null
+    }
+  },
+  "final_evaluation": {
+    "checkpoint": "/scratch/hroth/Code/nvflare/policy-fabric-main-20261124-naNhX4/run01/workspace/policy-fabric-poc/prod_00/admin@example.org/transfer/0d1066b8-6c79-48cc-a5db-eae66fbf0c49/workspace/app_server/FL_global_model.pt",
+    "parameter_change_l2": 0.39633364594554354,
+    "mean_dice": {
+      "TC": 0.7572503983974457,
+      "WT": 0.8654757291078568,
+      "ET": 0.7174936532974243
+    },
+    "mean_dice_all_regions": 0.7800732602675756,
+    "cases": [
+      {
+        "case": "BRATS_083.nii.gz",
+        "dice": {
+          "TC": 0.9254003167152405,
+          "WT": 0.8477229475975037,
+          "ET": 0.8588239550590515
+        },
+        "shape": [
+          240,
+          240,
+          155
+        ],
+        "prediction": "/scratch/hroth/Code/nvflare/policy-fabric-main-20261124-naNhX4/run01/evaluation/BRATS_083_prediction.nii.gz"
+      },
+      {
+        "case": "BRATS_213.nii.gz",
+        "dice": {
+          "TC": 0.6788527369499207,
+          "WT": 0.816770613193512,
+          "ET": 0.6984739899635315
+        },
+        "shape": [
+          240,
+          240,
+          155
+        ],
+        "prediction": "/scratch/hroth/Code/nvflare/policy-fabric-main-20261124-naNhX4/run01/evaluation/BRATS_213_prediction.nii.gz"
+      },
+      {
+        "case": "BRATS_272.nii.gz",
+        "dice": {
+          "TC": 0.5318050384521484,
+          "WT": 0.8893564343452454,
+          "ET": 0.5325818657875061
+        },
+        "shape": [
+          240,
+          240,
+          155
+        ],
+        "prediction": "/scratch/hroth/Code/nvflare/policy-fabric-main-20261124-naNhX4/run01/evaluation/BRATS_272_prediction.nii.gz"
+      },
+      {
+        "case": "BRATS_125.nii.gz",
+        "dice": {
+          "TC": 0.8929435014724731,
+          "WT": 0.908052921295166,
+          "ET": 0.7800948023796082
+        },
+        "shape": [
+          240,
+          240,
+          155
+        ],
+        "prediction": "/scratch/hroth/Code/nvflare/policy-fabric-main-20261124-naNhX4/run01/evaluation/BRATS_125_prediction.nii.gz"
+      }
+    ],
+    "note": "Small integration pilot; pretrained BraTS model may overlap MSD cases. Not an independent accuracy benchmark."
+  },
+  "passed": true
+}

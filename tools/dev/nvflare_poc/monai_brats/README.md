@@ -6,7 +6,9 @@ It uses `FedAvgRecipe`, the Client API, and `MonaiAlgo`, following the released
 [MONAI spleen example](https://github.com/NVIDIA/NVFlare/tree/2.9.1/examples/advanced/monai/spleen_ct_segmentation).
 Submission uses the existing example-local `PolicyProdEnv` hook.
 
-[H100 validation results](VALIDATION.md) · [Machine-readable evidence](validation/results.json)
+[Latest main-branch H100 validation](../VALIDATION.md#consolidated-main-migration--2026-11-24) ·
+[Original workload validation](VALIDATION.md) ·
+[Latest machine-readable evidence](../validation/main-20261124-results.json)
 
 The training, aggregation, TLS federation and job signatures are real. The
 self-contained harness uses **mock capabilities and mock Guardians**; it does
