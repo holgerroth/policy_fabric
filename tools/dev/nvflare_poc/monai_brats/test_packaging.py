@@ -15,12 +15,16 @@
 """Ensure exported jobs execute packaged code and include the pretrained checkpoint."""
 
 import json
+import subprocess
+import sys
 from pathlib import Path
 
-from job import build_recipe, package_bundle
+from demo import ADMIN, configure, free_ports
+from job import HERE, build_recipe, package_bundle
+from job_hash import hash_file
 
 
-def test_portable_job_contains_code_and_checkpoint(tmp_path):
+def make_bundle(tmp_path):
     bundle = tmp_path / "bundle"
     (bundle / "configs").mkdir(parents=True)
     (bundle / "models").mkdir()
@@ -30,6 +34,12 @@ def test_portable_job_contains_code_and_checkpoint(tmp_path):
     )
     checkpoint = bundle / "models/model.pt"
     checkpoint.write_bytes(b"checkpoint-export-sentinel")
+    return bundle
+
+
+def test_portable_job_contains_code_and_checkpoint(tmp_path):
+    bundle = make_bundle(tmp_path)
+    checkpoint = bundle / "models/model.pt"
     recipe = build_recipe(bundle)
     export = tmp_path / "exports"
     recipe.export(str(export))
@@ -48,3 +58,33 @@ def test_portable_job_contains_code_and_checkpoint(tmp_path):
         assert "custom/client.py" in executor["command"]
         for name in ("client.py", "msd_transforms.py", "bundle_config.py", "bundle/configs/train.json"):
             assert (app / "custom" / name).is_file()
+
+
+def test_freeze_cli_honors_destination_and_refuses_overwrite(tmp_path):
+    bundle = make_bundle(tmp_path)
+    workspace = tmp_path / "provisioning"
+    workspace.mkdir()
+    kits = configure(workspace, free_ports(4))
+    destination = tmp_path / "approval"
+    command = [
+        sys.executable,
+        str(HERE / "job.py"),
+        "--bundle-root",
+        str(bundle),
+        "--startup-kit",
+        str(kits / ADMIN),
+        "--freeze-only",
+        "--freeze-dir",
+        str(destination),
+    ]
+    result = subprocess.run(command, cwd=tmp_path, capture_output=True, text=True, timeout=60)
+    assert result.returncode == 0, result.stdout + result.stderr
+    report = json.loads(result.stdout)
+    job_dir = destination / "monai_brats"
+    assert report["job_dir"] == str(job_dir)
+    measured = {app: hash_file(job_dir / app / "policy_payload.zip") for app in report["digests"]}
+    assert measured == report["digests"] and len(measured) == 2
+    assert not (tmp_path / "exports").exists()
+    again = subprocess.run(command, cwd=tmp_path, capture_output=True, text=True, timeout=60)
+    assert again.returncode != 0 and "Export already exists" in again.stderr
+    assert measured == {app: hash_file(job_dir / app / "policy_payload.zip") for app in measured}

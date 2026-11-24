@@ -117,7 +117,7 @@ For real approval, export and freeze the complete bundle application first:
 python tools/dev/nvflare_poc/monai_brats/job.py \
   --bundle-root /path/to/brats_mri_segmentation \
   --startup-kit /path/to/admin@example.org \
-  --freeze-only --export-dir /path/to/frozen-jobs
+  --freeze-only --freeze-dir /path/to/frozen-jobs
 ```
 
 Have the trusted issuer approve each printed ZIP digest in its Script identity's

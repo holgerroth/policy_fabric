@@ -91,7 +91,7 @@ if __name__ == "__main__":
     parser.add_argument("--username", default="admin@example.org")
     parser.add_argument("--rounds", type=int, default=2)
     parser.add_argument("--local-epochs", type=int, default=1)
-    parser.add_argument("--export-dir", type=Path, default=Path("exports"), help="Destination for --freeze-only")
+    parser.add_argument("--freeze-dir", type=Path, default=Path("exports"), help="Destination for --freeze-only")
     choice = parser.add_mutually_exclusive_group(required=True)
     choice.add_argument("--freeze-only", action="store_true", help="Export and freeze for external digest approval")
     choice.add_argument("--mock", action="store_true", help="Use explicit insecure mock capabilities")
@@ -113,11 +113,11 @@ if __name__ == "__main__":
     env = PolicyProdEnv(startup_kit_location=str(args.startup_kit), username=args.username, before_submit=before_submit)
     recipe = build_recipe(args.bundle_root, rounds=args.rounds, local_epochs=args.local_epochs)
     if args.freeze_only:
-        job_dir = args.export_dir.resolve() / "monai_brats"
+        job_dir = args.freeze_dir.resolve() / "monai_brats"
         if job_dir.exists():
-            parser.error(f"Export already exists: {job_dir}; use a fresh --export-dir")
+            parser.error(f"Export already exists: {job_dir}; use a fresh --freeze-dir")
         # Export does not call the submission hook or connect to the federation.
-        recipe.export(str(args.export_dir.resolve()), env=env)
+        recipe.export(str(args.freeze_dir.resolve()), env=env)
         package_bundle(job_dir, args.bundle_root)
         print(json.dumps({"job_dir": str(job_dir), "digests": preparation.freeze(job_dir)}, indent=2))
     else:

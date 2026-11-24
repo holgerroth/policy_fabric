@@ -19,8 +19,8 @@ The devcontainer brings up the policy engine, registries, and webapp; open the f
 Recipes and site deployment checks to the Policy Fabric client and inference
 Guardian. Includes a [design schematic](tools/dev/nvflare_poc/DESIGN.md), a
 self-contained secure-federation demo with explicit mocks, and validation notes.
-This example targets the `authorities` development APIs; full PDO-backed
-NVFlare end-to-end validation remains pending.
+This example targets consolidated `main` and its credential-based capability
+issuance. Full PDO-backed NVFlare end-to-end validation remains pending.
 
 ## Layout
 
