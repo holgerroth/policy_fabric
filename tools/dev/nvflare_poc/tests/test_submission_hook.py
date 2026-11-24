@@ -57,6 +57,10 @@ def test_recipe_execute_prepares_final_export_before_submit(tmp_path, submission
     def prepare(path):
         assert (path / "app_site_a" / "config" / "config_fed_client.json").is_file()
         assert (path / "app_site_b" / "custom" / "client.py").is_file()
+        for site in ("site_a", "site_b"):
+            config = (path / f"app_{site}" / "config/config_fed_client.json").read_text()
+            assert "custom/client.py" in config
+            assert str(Path(__file__).resolve().parents[1] / "client.py") not in config
         paths.append(path)
         order.append("hook")
         prepare_job(path, ("policy-a", "policy-b"))

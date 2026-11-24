@@ -25,7 +25,9 @@ while flare.is_running():
     model = flare.receive()
     marker_root = os.environ.get("PF_POC_EXECUTION_MARKERS")
     if marker_root:
-        Path(marker_root, f"{flare.get_job_id()}-{flare.get_site_name()}.txt").write_text("executed\n")
+        Path(marker_root, f"{flare.get_job_id()}-{flare.get_site_name()}.txt").write_text(
+            str(Path(__file__).resolve()) + "\n"
+        )
     flare.send(
         FLModel(params={key: value + 1.0 for key, value in model.params.items()}, meta={"NUM_STEPS_CURRENT_ROUND": 1})
     )

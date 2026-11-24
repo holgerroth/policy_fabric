@@ -61,10 +61,38 @@ All four cases use `recipe.execute(PolicyProdEnv(...))`:
 | `missing-capability` | Site B's job-authorization hook denies scheduling; no client script executes. |
 | `guardian-unavailable` | Deployment fails closed; no client script executes. |
 
+The approved job executes `custom/client.py` from the deployed, authorized
+archive. The harness checks that execution path as well as the final model.
+
 `results.json`, logs, final exports, execution markers and result workspaces are
 saved under the run directory. Generated startup kits contain test private keys;
 run directories are ignored by Git. Mock capabilities are unsigned base64 JSON
 and freely forgeable: the demo validates enforcement plumbing, not trusted approval.
+
+### Local Guardian hosting
+
+Both this demo and the [MONAI example](monai_brats/README.md) start **one local
+mock Guardian per site**, as separate Python processes on `127.0.0.1` with
+different dynamically allocated ports. The harness configures each site's
+`PolicyAppDeployer` with its corresponding address. No Guardian service needs
+to be hosted externally for these examples.
+
+For manual mock testing, a local instance can be started with:
+
+```bash
+python tools/dev/mock_inference_guardian/server.py --interface 127.0.0.1 --port 7900
+```
+
+The [real inference Guardian](../../guardians/inference/README.md) also supports
+local container deployment. Use `guardian_mode="pdo"` with a configured real
+Guardian; it needs the PDO services and genuine encrypted capabilities. The
+upstream launcher also starts its own toy FL client, so it is not a complete
+NVFlare deployment recipe. NVFlare's daemon must reach the Guardian through its
+own loopback network namespace; the current adapter rejects remote endpoints.
+
+The four cases above demonstrate job acceptance and rejection at the capability
+and deployment layers. Rejection by a live policy because of missing credentials
+or disallowed research purpose remains part of the pending PDO integration run.
 
 ## Recipe hook
 

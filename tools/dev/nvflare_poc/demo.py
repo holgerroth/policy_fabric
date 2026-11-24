@@ -117,7 +117,12 @@ def configure(output, ports):
 
 def make_recipe(case):
     recipe = NumpyFedAvgRecipe(
-        name=case, min_clients=2, num_rounds=1, model=[[1.0, 2.0], [3.0, 4.0]], train_script=str(HERE / "client.py")
+        name=case,
+        min_clients=2,
+        num_rounds=1,
+        model=[[1.0, 2.0], [3.0, 4.0]],
+        train_script=str(HERE / "client.py"),
+        launch_external_process=True,
     )
     set_per_site_config(recipe, {site: {} for site in ASSETS})
     return recipe
@@ -288,6 +293,10 @@ def run(output, timeout):
                 registered = deployed_meta.get("job_clients", [])
                 result["registered_clients"] = registered
                 assert status == "FINISHED:COMPLETED" and len(executed) == 2, result
+                executed_paths = {site: (markers / f"{job_id}-{site}.txt").read_text().strip() for site in ASSETS}
+                for site, script_path in executed_paths.items():
+                    assert Path(script_path) == kits / site / job_id / f"app_{site}" / "custom/client.py", script_path
+                result["executed_paths"] = executed_paths
                 # Verify actual registration propagation, not just configured local values.
                 observed = {client["name"]: client.get("site_config", {}).get("asset_did") for client in registered}
                 assert observed == ASSETS, observed
