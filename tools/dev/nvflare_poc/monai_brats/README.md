@@ -6,9 +6,9 @@ It uses `FedAvgRecipe`, the Client API, and `MonaiAlgo`, following the released
 [MONAI spleen example](https://github.com/NVIDIA/NVFlare/tree/2.9.1/examples/advanced/monai/spleen_ct_segmentation).
 Submission uses the existing example-local `PolicyProdEnv` hook.
 
-[Latest main-branch H100 validation](../VALIDATION.md#consolidated-main-migration--2026-11-24) ·
+[Latest H100 rerun](../VALIDATION.md#local-guardian-rerun--2026-11-24) ·
 [Original workload validation](VALIDATION.md) ·
-[Latest machine-readable evidence](../validation/main-20261124-results.json)
+[Latest machine-readable evidence](../validation/local-guardians-20261124.json)
 
 The training, aggregation, TLS federation and job signatures are real. The
 self-contained harness uses **mock capabilities and mock Guardians**; it does
@@ -84,7 +84,9 @@ labeled subjects, balanced across sites. Increase `--rounds`, `--local-epochs`
 and the per-job `--timeout` when running larger experiments.
 
 The harness provisions a fresh local TLS federation, launches two clients and
-two upstream mock Guardians, and runs these checks:
+one upstream mock Guardian per site on `127.0.0.1` (separate processes and ports),
+and runs these checks. No external Guardian service is needed; see
+[local hosting and real Guardian requirements](../README.md#local-guardian-hosting).
 
 | Case | Required result |
 | --- | --- |

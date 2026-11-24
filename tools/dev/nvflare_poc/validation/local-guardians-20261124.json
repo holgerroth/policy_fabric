@@ -1,0 +1,403 @@
+{
+  "date": "2026-11-24",
+  "upstream_main": "d1fddd767e37b019df965b6bd707b3d9d473c96f",
+  "monai_commit": "73f91cf758adc3a4a2ac747c2d38a12e1beae5c9",
+  "numpy_and_tests_commit": "701889d730fbbd70385d9ca2dbd9573217c4f880",
+  "change_note": "The follow-up changes NumPy recipe execution to the packaged client script, adds path assertions, and documents local hosting. MONAI workload and shared authorization/deployment helpers are unchanged.",
+  "hostname": "r1u14",
+  "python": "3.11.15",
+  "versions": {
+    "nvflare": "2.9.1",
+    "monai": "1.4.0",
+    "torch": "2.6.0",
+    "numpy": "1.26.4"
+  },
+  "runtime": "/scratch/hroth/Code/nvflare/policy-fabric-brats-20261116-jjiBqg/.venv",
+  "output_root": "/scratch/hroth/Code/nvflare/policy-fabric-rerun-20261124-dsVCHf",
+  "test_summary": "66 passed, 4 warnings in 14.10s",
+  "exit_codes": {
+    "original_suite_and_demos": 0,
+    "fixed_tests": 0,
+    "fixed_numpy_demo": 0
+  },
+  "local_guardian_endpoints": {
+    "numpy-fixed": {
+      "site_a": {
+        "guardian_url": "http://127.0.0.1:53393",
+        "timeout": 2.0,
+        "guardian_mode": "mock"
+      },
+      "site_b": {
+        "guardian_url": "http://127.0.0.1:57685",
+        "timeout": 2.0,
+        "guardian_mode": "mock"
+      }
+    },
+    "monai-demo": {
+      "site_a": {
+        "guardian_url": "http://127.0.0.1:47657",
+        "timeout": 2.0,
+        "guardian_mode": "mock"
+      },
+      "site_b": {
+        "guardian_url": "http://127.0.0.1:56787",
+        "timeout": 2.0,
+        "guardian_mode": "mock"
+      }
+    }
+  },
+  "remaining_run_processes": [],
+  "gpu_status_after_run": [
+    "0, NVIDIA H100 NVL, 0 %, 0 MiB, 95830 MiB",
+    "1, NVIDIA H100 NVL, 0 %, 0 MiB, 95830 MiB",
+    "2, NVIDIA H100 NVL, 0 %, 0 MiB, 95830 MiB",
+    "3, NVIDIA H100 NVL, 0 %, 0 MiB, 95830 MiB"
+  ],
+  "validation_boundary": "Real NVFlare TLS, signed jobs, deployment and training; mock issuance and Guardians. Live PDO credential/policy/crypto approval is not validated.",
+  "source_files_sha256": {
+    "tools/dev/nvflare_poc/client.py": "9833f09be04db2379cc5781118b24174c704f0e647e41cbeef7bbf57e3734faf",
+    "tools/dev/nvflare_poc/demo.py": "47275f603137415f49df22bf7c3c4d84691f01d497ca3f78139bbe9d51204087",
+    "tools/dev/nvflare_poc/job_hash.py": "4a7d0cc4d49d57dfd2375a59fe29d4628375cbe6a7cc79bd3e884bfd0e5087d8",
+    "tools/dev/nvflare_poc/monai_brats/bundle_config.py": "47d4c6bc731cbb1957d73d8d61423f50e1d2142d1bef39848a6b48ecce696c3c",
+    "tools/dev/nvflare_poc/monai_brats/client.py": "3393e6200fc43ecde2c0c84b40f60b0d0ab345bd28b88c47b769b7de2f9e8cb1",
+    "tools/dev/nvflare_poc/monai_brats/evaluate.py": "d353e246c5847d25c5b52b7dba7f2a0170fe3a81b6af27e88056b73a268baf97",
+    "tools/dev/nvflare_poc/monai_brats/job.py": "3c337014ea8f3536c32fe434720320b84c2a330fa876b3382e21011c0ce55aa9",
+    "tools/dev/nvflare_poc/monai_brats/msd_transforms.py": "b7e5bb62cf0246ee7f18c7724416c6c5fb2fb022a50f3cbafbb2a748f82d23a4",
+    "tools/dev/nvflare_poc/monai_brats/prepare_data.py": "d98965b57ef0f5134ee34aaec852e1e50485852c6282b8fd50610a2e8c0f0a95",
+    "tools/dev/nvflare_poc/monai_brats/run_e2e.py": "76428477cb3850a3e1f364bc6f28b33a9809849c76459e65fffb49eab1ce3f0d",
+    "tools/dev/nvflare_poc/monai_brats/test_data.py": "a8a6392bfd4d1ce43849406cb8b7f0d13a2a5ed5c94fb3e5503de4791a820bd1",
+    "tools/dev/nvflare_poc/monai_brats/test_packaging.py": "8fee9337058b9e0021caa81535ef7ce0a487701b671292c1500068f9a406b485",
+    "tools/dev/nvflare_poc/pf_nvflare.py": "b83878cd32fffe7b98eda0d2ec774a8a99e64a352ad9c9452833ee94804e13e2",
+    "tools/dev/nvflare_poc/policy_client.py": "4a171838ef3f872a9903e7ead0441ceaf236e2ce9e8c535c0d913bee6433df21",
+    "tools/dev/nvflare_poc/prepare_job.py": "01ccd50155828c6fea9f9db67a48c9e0128b00a58bb814245929bfc61e1a02a6",
+    "tools/dev/nvflare_poc/submission_hook.py": "7e3b32792f0e6c364dc737337e1485e7ab19ac6498739350e68b6041a6c57adf",
+    "tools/dev/nvflare_poc/tests/test_integration.py": "5ffe60b3bad01a60e1e49fa99c6a8c1e14f41e75f496dae11ff8e1fd652fcf6c",
+    "tools/dev/nvflare_poc/tests/test_policy_client.py": "e011246282c1efd3b9193250cff44d23816beb87c36cae1e745ef825edc12844",
+    "tools/dev/nvflare_poc/tests/test_submission_hook.py": "3f71eca7c3ff7db9354d61cc9d6349390cd3397f07ea6dd1da6ade9ca25d4365"
+  },
+  "results": {
+    "numpy-fixed": {
+      "nvflare_version": "2.9.1",
+      "mock_guardian": true,
+      "submission": "Recipe.execute(PolicyProdEnv(before_submit=...))",
+      "cases": {
+        "allowed": {
+          "job_id": "0aed716f-2e64-4769-a381-8730a4ef136c",
+          "status": "FINISHED:COMPLETED",
+          "executed": [
+            "0aed716f-2e64-4769-a381-8730a4ef136c-site_a.txt",
+            "0aed716f-2e64-4769-a381-8730a4ef136c-site_b.txt"
+          ],
+          "approved_digests": {
+            "app_site_a": "sha256:3689bf8b2f1ef88a8420511814a825dc7801da37f2b0808cd443f62621a2cdad",
+            "app_site_b": "sha256:28026060fb73eb7c384264bed1a61fe5b228deb8d7cb6f732197d8649056d9d6"
+          },
+          "deploy_detail": [
+            "server: OK",
+            "site_a: OK",
+            "site_b: OK"
+          ],
+          "schedule_history": [
+            "2026-11-24 13:27:08: scheduled"
+          ],
+          "registered_clients": [
+            {
+              "name": "site_a",
+              "site_config": {
+                "asset_did": "did:pdo:asset-a"
+              }
+            },
+            {
+              "name": "site_b",
+              "site_config": {
+                "asset_did": "did:pdo:asset-b"
+              }
+            }
+          ],
+          "executed_paths": {
+            "site_a": "/scratch/hroth/Code/nvflare/policy-fabric-rerun-20261124-dsVCHf/numpy-fixed/workspace/policy-fabric-poc/prod_00/site_a/0aed716f-2e64-4769-a381-8730a4ef136c/app_site_a/custom/client.py",
+            "site_b": "/scratch/hroth/Code/nvflare/policy-fabric-rerun-20261124-dsVCHf/numpy-fixed/workspace/policy-fabric-poc/prod_00/site_b/0aed716f-2e64-4769-a381-8730a4ef136c/app_site_b/custom/client.py"
+          },
+          "final_model": [
+            [
+              2.0,
+              3.0
+            ],
+            [
+              4.0,
+              5.0
+            ]
+          ],
+          "result_path": "/scratch/hroth/Code/nvflare/policy-fabric-rerun-20261124-dsVCHf/numpy-fixed/workspace/policy-fabric-poc/prod_00/admin@example.org/transfer/0aed716f-2e64-4769-a381-8730a4ef136c"
+        },
+        "tampered": {
+          "job_id": "6b6aa29f-3034-4404-b21f-3d15a99f5183",
+          "status": "FINISHED:FAILED_TO_RUN",
+          "executed": [],
+          "approved_digests": {
+            "app_site_a": "sha256:9368481ae909675042141f31d63041f499d12f10fdb32658a951a780307ca772",
+            "app_site_b": "sha256:22d1dd40f17b929e199eac87fe1e05c2839d28eb431552e4cd2517be132c256e"
+          },
+          "deploy_detail": [
+            "server: OK",
+            "site_a: NVFLARE_ERROR: Policy Fabric denied deployment: Guardian denied request: HTTP 422",
+            "site_b: NVFLARE_ERROR: Policy Fabric denied deployment: Guardian denied request: HTTP 422",
+            "num_ok_sites 0 < required_min_sites 2"
+          ],
+          "schedule_history": null
+        },
+        "missing-capability": {
+          "job_id": "2b315239-fe14-4b58-aec0-6750cd2a4560",
+          "status": "FINISHED:CAN_NOT_SCHEDULE",
+          "executed": [],
+          "approved_digests": {
+            "app_site_a": "sha256:e296da13555d00d6dd44ad7f3301dddffeb1c16369655658ce4a4514ae1ab3a0",
+            "app_site_b": "sha256:932416b381ba54b0036d0f2ea22d11d7d959ca1affe3f5f0183361f29a8b9249"
+          },
+          "deploy_detail": null,
+          "schedule_history": [
+            "2026-11-24 13:27:27: not enough sites have enough resources (ok sites 1 < min sites 2). Details: site_b: Policy Fabric: missing capability for this site",
+            "2026-11-24 13:27:28: not enough sites have enough resources (ok sites 1 < min sites 2). Details: site_b: Policy Fabric: missing capability for this site",
+            "2026-11-24 13:27:29: exceeded max schedule count 2"
+          ]
+        },
+        "guardian-unavailable": {
+          "job_id": "b5a0ab2c-fea0-4b8b-a6f0-255903495687",
+          "status": "FINISHED:FAILED_TO_RUN",
+          "executed": [],
+          "approved_digests": {
+            "app_site_a": "sha256:88bf3f30a5c819a7135c1b3641cb56434d8d8f46aa82972efcb71fbc8bec7972",
+            "app_site_b": "sha256:15b0dab0319cff65118914d707263aec0cf836c24ec5f26de4d45909520e4fc7"
+          },
+          "deploy_detail": [
+            "server: OK",
+            "site_a: NVFLARE_ERROR: Policy Fabric denied deployment: Guardian unavailable or invalid response (URLError)",
+            "site_b: NVFLARE_ERROR: Policy Fabric denied deployment: Guardian unavailable or invalid response (URLError)",
+            "num_ok_sites 0 < required_min_sites 2"
+          ],
+          "schedule_history": null
+        }
+      },
+      "passed": true
+    },
+    "monai-demo": {
+      "nvflare_version": "2.9.1",
+      "bundle": "MONAI/brats_mri_segmentation@0.5.4",
+      "mock_guardian": true,
+      "submission": "Recipe.execute(PolicyProdEnv)",
+      "rounds": 2,
+      "local_epochs": 1,
+      "gpus": [
+        "0",
+        "1"
+      ],
+      "cases": {
+        "allowed": {
+          "job_id": "4d1604ad-ec8a-42aa-9b87-466ee1dcbef7",
+          "status": "FINISHED:COMPLETED",
+          "executed": [
+            "4d1604ad-ec8a-42aa-9b87-466ee1dcbef7-site_a.txt",
+            "4d1604ad-ec8a-42aa-9b87-466ee1dcbef7-site_b.txt"
+          ],
+          "approved_digests": {
+            "app_site_a": "sha256:3fa49ac6b6bf31a6344561db9f75ac787d174316b9c770c7774a68b87d513813",
+            "app_site_b": "sha256:465a0fd0f0dc66ace0230762206a8503b52d59954bb2fc63af052818db793f12"
+          },
+          "deploy_detail": [
+            "server: OK",
+            "site_a: OK",
+            "site_b: OK"
+          ],
+          "schedule_history": [
+            "2026-11-24 13:23:07: scheduled"
+          ],
+          "registered_assets": {
+            "site_a": "did:pdo:asset-a",
+            "site_b": "did:pdo:asset-b"
+          },
+          "clients": [
+            {
+              "site": "site_a",
+              "job_id": "4d1604ad-ec8a-42aa-9b87-466ee1dcbef7",
+              "script_path": "/scratch/hroth/Code/nvflare/policy-fabric-rerun-20261124-dsVCHf/monai-demo/workspace/policy-fabric-poc/prod_00/site_a/4d1604ad-ec8a-42aa-9b87-466ee1dcbef7/app_site_a/custom/client.py",
+              "gpu": "NVIDIA H100 NVL",
+              "train_cases": 4,
+              "validation_cases": 2,
+              "rounds": [
+                {
+                  "round": 0,
+                  "global_validation": {
+                    "val_mean_dice": 0.7687431573867798,
+                    "val_mean_dice_tc": 0.6976322531700134,
+                    "val_mean_dice_wt": 0.8644375205039978,
+                    "val_mean_dice_et": 0.7441598176956177
+                  },
+                  "training_steps": 4
+                },
+                {
+                  "round": 1,
+                  "global_validation": {
+                    "val_mean_dice": 0.7684615850448608,
+                    "val_mean_dice_tc": 0.7220371961593628,
+                    "val_mean_dice_wt": 0.8654009699821472,
+                    "val_mean_dice_et": 0.7179464101791382
+                  },
+                  "training_steps": 4
+                }
+              ]
+            },
+            {
+              "site": "site_b",
+              "job_id": "4d1604ad-ec8a-42aa-9b87-466ee1dcbef7",
+              "script_path": "/scratch/hroth/Code/nvflare/policy-fabric-rerun-20261124-dsVCHf/monai-demo/workspace/policy-fabric-poc/prod_00/site_b/4d1604ad-ec8a-42aa-9b87-466ee1dcbef7/app_site_b/custom/client.py",
+              "gpu": "NVIDIA H100 NVL",
+              "train_cases": 4,
+              "validation_cases": 2,
+              "rounds": [
+                {
+                  "round": 0,
+                  "global_validation": {
+                    "val_mean_dice": 0.7828071713447571,
+                    "val_mean_dice_tc": 0.7939764261245728,
+                    "val_mean_dice_wt": 0.872836172580719,
+                    "val_mean_dice_et": 0.6816089153289795
+                  },
+                  "training_steps": 4
+                },
+                {
+                  "round": 1,
+                  "global_validation": {
+                    "val_mean_dice": 0.8097716569900513,
+                    "val_mean_dice_tc": 0.8251242637634277,
+                    "val_mean_dice_wt": 0.8692898750305176,
+                    "val_mean_dice_et": 0.7349008321762085
+                  },
+                  "training_steps": 4
+                }
+              ]
+            }
+          ],
+          "checkpoint": "/scratch/hroth/Code/nvflare/policy-fabric-rerun-20261124-dsVCHf/monai-demo/workspace/policy-fabric-poc/prod_00/admin@example.org/transfer/4d1604ad-ec8a-42aa-9b87-466ee1dcbef7/workspace/app_server/FL_global_model.pt",
+          "result_path": "/scratch/hroth/Code/nvflare/policy-fabric-rerun-20261124-dsVCHf/monai-demo/workspace/policy-fabric-poc/prod_00/admin@example.org/transfer/4d1604ad-ec8a-42aa-9b87-466ee1dcbef7"
+        },
+        "tampered": {
+          "job_id": "19adecf7-5c76-4cc4-b3a6-ef6989ee508c",
+          "status": "FINISHED:FAILED_TO_RUN",
+          "executed": [],
+          "approved_digests": {
+            "app_site_a": "sha256:2b67372b76eb9270340b41544062c0301a10ecf0197fb228870faf5e6fbd167b",
+            "app_site_b": "sha256:1e5cf9bc5c9ff0e0718ab8d34ad8917bb8683ca0295fe6b8bb571fb5c4cd5e0d"
+          },
+          "deploy_detail": [
+            "server: OK",
+            "site_a: NVFLARE_ERROR: Policy Fabric denied deployment: Guardian denied request: HTTP 422",
+            "site_b: NVFLARE_ERROR: Policy Fabric denied deployment: Guardian denied request: HTTP 422",
+            "num_ok_sites 0 < required_min_sites 2"
+          ],
+          "schedule_history": null
+        },
+        "missing-capability": {
+          "job_id": "6f5ee717-28dd-4d06-bbcf-11a8e4040ec0",
+          "status": "FINISHED:CAN_NOT_SCHEDULE",
+          "executed": [],
+          "approved_digests": {
+            "app_site_a": "sha256:b4d333f8a3c92f172b87f5856c9c6f444b9bf71d36c76487375897e2552109cf",
+            "app_site_b": "sha256:92bce0a7ffe3eb92df0db80dd238938678300980f1245efca321b6008ac26852"
+          },
+          "deploy_detail": null,
+          "schedule_history": [
+            "2026-11-24 13:23:56: not enough sites have enough resources (ok sites 1 < min sites 2). Details: site_b: Policy Fabric: missing capability for this site",
+            "2026-11-24 13:23:57: not enough sites have enough resources (ok sites 1 < min sites 2). Details: site_b: Policy Fabric: missing capability for this site",
+            "2026-11-24 13:23:58: exceeded max schedule count 2"
+          ]
+        },
+        "guardian-unavailable": {
+          "job_id": "4bbdcd8d-2202-426c-bafd-cff5cd2e9d39",
+          "status": "FINISHED:FAILED_TO_RUN",
+          "executed": [],
+          "approved_digests": {
+            "app_site_a": "sha256:d67a14be2c9dc1c26bad7ae08ef5774790796047a382a617df8d054870d294b2",
+            "app_site_b": "sha256:86967fea16ef24e1140b14b8562493e26e0387db83aab36543a4285b993c8d19"
+          },
+          "deploy_detail": [
+            "server: OK",
+            "site_a: NVFLARE_ERROR: Policy Fabric denied deployment: Guardian unavailable or invalid response (URLError)",
+            "site_b: NVFLARE_ERROR: Policy Fabric denied deployment: Guardian unavailable or invalid response (URLError)",
+            "num_ok_sites 0 < required_min_sites 2"
+          ],
+          "schedule_history": null
+        }
+      },
+      "final_evaluation": {
+        "checkpoint": "/scratch/hroth/Code/nvflare/policy-fabric-rerun-20261124-dsVCHf/monai-demo/workspace/policy-fabric-poc/prod_00/admin@example.org/transfer/4d1604ad-ec8a-42aa-9b87-466ee1dcbef7/workspace/app_server/FL_global_model.pt",
+        "parameter_change_l2": 0.3963084786564798,
+        "mean_dice": {
+          "TC": 0.7572091668844223,
+          "WT": 0.8654488623142242,
+          "ET": 0.7173330336809158
+        },
+        "mean_dice_all_regions": 0.7799970209598541,
+        "cases": [
+          {
+            "case": "BRATS_083.nii.gz",
+            "dice": {
+              "TC": 0.9254003167152405,
+              "WT": 0.8477334380149841,
+              "ET": 0.8587363362312317
+            },
+            "shape": [
+              240,
+              240,
+              155
+            ],
+            "prediction": "/scratch/hroth/Code/nvflare/policy-fabric-rerun-20261124-dsVCHf/monai-demo/evaluation/BRATS_083_prediction.nii.gz"
+          },
+          {
+            "case": "BRATS_213.nii.gz",
+            "dice": {
+              "TC": 0.6785667538642883,
+              "WT": 0.8166614174842834,
+              "ET": 0.6980730891227722
+            },
+            "shape": [
+              240,
+              240,
+              155
+            ],
+            "prediction": "/scratch/hroth/Code/nvflare/policy-fabric-rerun-20261124-dsVCHf/monai-demo/evaluation/BRATS_213_prediction.nii.gz"
+          },
+          {
+            "case": "BRATS_272.nii.gz",
+            "dice": {
+              "TC": 0.5319229364395142,
+              "WT": 0.8893347382545471,
+              "ET": 0.5323943495750427
+            },
+            "shape": [
+              240,
+              240,
+              155
+            ],
+            "prediction": "/scratch/hroth/Code/nvflare/policy-fabric-rerun-20261124-dsVCHf/monai-demo/evaluation/BRATS_272_prediction.nii.gz"
+          },
+          {
+            "case": "BRATS_125.nii.gz",
+            "dice": {
+              "TC": 0.8929466605186462,
+              "WT": 0.9080658555030823,
+              "ET": 0.7801283597946167
+            },
+            "shape": [
+              240,
+              240,
+              155
+            ],
+            "prediction": "/scratch/hroth/Code/nvflare/policy-fabric-rerun-20261124-dsVCHf/monai-demo/evaluation/BRATS_125_prediction.nii.gz"
+          }
+        ],
+        "note": "Small integration pilot; pretrained BraTS model may overlap MSD cases. Not an independent accuracy benchmark."
+      },
+      "passed": true
+    }
+  }
+}

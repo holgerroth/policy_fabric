@@ -1,5 +1,64 @@
 # Local validation
 
+## Local Guardian rerun — 2026-11-24
+
+**Passed:** both the lightweight NumPy example and the MONAI BraTS example ran
+end to end on H100 with a secure, two-site NVFlare **2.9.1** federation. Each
+example started **one local mock Guardian per site**, on separate dynamically
+allocated `127.0.0.1` ports. No external Guardian service was used.
+
+| Case | NumPy | MONAI | Client executions per example |
+| --- | --- | --- | ---: |
+| Approved archive and capability | `FINISHED:COMPLETED` | `FINISHED:COMPLETED` | 2 |
+| Re-signed archive changed after approval | `FINISHED:FAILED_TO_RUN`; Guardian HTTP 422 | Same | 0 |
+| Missing site B capability | `FINISHED:CAN_NOT_SCHEDULE` | Same | 0 |
+| Guardian unavailable | `FINISHED:FAILED_TO_RUN` | Same | 0 |
+
+The NumPy rerun uncovered an execution configuration that pointed at the source
+checkout. The fix sets `launch_external_process=True`, matching the MONAI
+example. The repeated NumPy run asserts that both sites execute their deployed
+`app_<site>/custom/client.py`, and checks the final model equals
+`[[2, 3], [4, 5]]`. The Recipe export regression test also rejects the original
+absolute source path. This correction is included in the results above.
+
+MONAI completed two FedAvg rounds, one local epoch per round, using four training
+and two validation subjects per site. The final model changed from the pretrained
+checkpoint (parameter-change L2 **0.396308**) and generated four full-volume NIfTI
+predictions. Final mean Dice: **TC 0.7572, WT 0.8654, ET 0.7173; overall 0.7800**.
+These are functional integration results; the pretrained model may overlap MSD
+subjects, so they are not an independent accuracy benchmark.
+
+- MONAI source: `73f91cf758adc3a4a2ac747c2d38a12e1beae5c9`.
+- Corrected NumPy and final tests: `701889d730fbbd70385d9ca2dbd9573217c4f880`.
+  The follow-up leaves the MONAI workload and shared authorization/deployment
+  helpers unchanged; GPU training was not repeated after this NumPy-only fix.
+- Final suite: **66 passed**, four expected mock capability secret-scan warnings.
+- Runtime: node `r1u14`, Python **3.11.15**, MONAI **1.4.0**, PyTorch
+  **2.6.0+cu124**, bundle **0.5.4**; GPUs 0 and 1 for MONAI.
+- Black, isort and whitespace checks passed for the fix.
+
+[Machine-readable evidence](validation/local-guardians-20261124.json) includes
+both examples' job IDs, rejection reasons, approved digests, execution paths,
+local Guardian addresses, metrics, runtime and source provenance. H100 output:
+
+```text
+/scratch/hroth/Code/nvflare/policy-fabric-rerun-20261124-dsVCHf
+```
+
+`logs/monai.log` and `monai-demo/` retain the MONAI run;
+`logs/tests-fixed.log`, `logs/numpy-fixed.log` and `numpy-fixed/` retain the final
+NumPy validation. The initial NumPy run is retained in `numpy-demo/` for
+diagnostics; it predates the execution-path fix. Generated private keys, data,
+checkpoints and predictions remain on H100 and are not committed.
+All processes belonging to this run were stopped; all four GPUs were idle
+with no GPU memory allocated afterward.
+
+**Validation boundary:** these examples demonstrate acceptance and rejection
+using mock capabilities and mock Guardians. They do not establish live policy
+approval, credential trust, or encrypted-capability verification. The real
+Guardian can also run locally in a container, but the complete PDO-backed
+NVFlare flow remains unvalidated. See [local hosting](README.md#local-guardian-hosting).
+
 ## Consolidated main migration — 2026-11-24
 
 **Passed:** the migrated contract tests, secure two-site MONAI training,
