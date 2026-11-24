@@ -45,11 +45,14 @@ def _load_client(webapp_dir):
 
 
 class PolicyFabricCapabilityProvider:
-    """Resolve assets, check readiness, then mint a capability for each exact digest.
+    """Resolve assets and mint capabilities from the selected role credentials.
 
-    targets: [{asset_did, app_name, wallets: {role: wallet_id}, params: {...}}].
-    Policy Fabric determines credential requirements, trust, and approval. A
-    refusal aborts the submission; it never falls back to mock issuance.
+    targets: [{asset_did, app_name, wallets: {role: wallet_id}}].
+    On main, Policy Fabric takes the authorized digest from ScriptHashCredential;
+    it does not accept a measured digest as a capability-issuance parameter.
+    The Guardian compares that authorized digest with the received archive.
+    Policy Fabric determines credential requirements, trust, and approval.
+    A refusal aborts submission; there is no fallback to mock issuance.
     """
 
     def __init__(self, *, user_name, targets, webapp_dir=None):
@@ -71,9 +74,12 @@ class PolicyFabricCapabilityProvider:
             seen.add(pair)
             if not isinstance(target.get("wallets"), dict) or not target["wallets"].get("Script"):
                 raise ValueError("target requires wallets including the Script role")
-            params = target.get("params", {})
-            if not isinstance(params, dict) or "script_digest" in params:
-                raise ValueError("script_digest is measured by the submission hook, never set in target params")
+            unsupported = set(target) - {"asset_did", "app_name", "wallets"}
+            if unsupported:
+                raise ValueError(
+                    f"Unsupported target fields: {sorted(unsupported)}. "
+                    "Policy Fabric main uses role credentials, not request params or configured digests."
+                )
 
     @classmethod
     def from_file(cls, path):
@@ -96,10 +102,11 @@ class PolicyFabricCapabilityProvider:
                 asset_did=asset_did,
                 metadata=asset.get("metadata") or {},
                 wallets=target["wallets"],
-                params={**target.get("params", {}), "script_digest": digests[app_name]},
             )
             if runner.name != "inference" or not runner.federated:
                 raise ValueError(f"{asset_did}: requires an inference Guardian")
+            # Issuance uses the Script wallet's approved hash, not digests[app_name].
+            # A stale/wrong Script credential must fail the site's Guardian check.
             capability = runner.mint_capability()
             if not isinstance(capability, dict) or not capability or "request_context" in capability:
                 raise ValueError("Policy Fabric returned an invalid capability envelope")

@@ -5,10 +5,11 @@ capability through the installed Policy Fabric client, and submits through the
 normal Flare API. Each site's NVFlare deployment plugin measures the received
 archive and asks its configured Guardian whether it may execute it.
 
-This example is based on MLCommons Policy Fabric's **`authorities` branch at
-[`31776f3`](https://github.com/mlcommons/policy_fabric/commit/31776f3df799047d001067271a1155e21bda1cc4)**
-(November 8, 2026). That branch includes the `inference-guardian` changes and the
-new request-digest/authority APIs; these are ahead of upstream `main`.
+This example is based on consolidated MLCommons Policy Fabric **`main` at
+[`d1fddd7`](https://github.com/mlcommons/policy_fabric/commit/d1fddd767e37b019df965b6bd707b3d9d473c96f)**
+(November 23, 2026). It uses that version's credential-based capability issuance
+and explicit inference Guardian decisions. The former `authorities` branch's
+request-parameter and readiness APIs are not used.
 
 [Design and team schematic](DESIGN.md) · [Validation evidence](VALIDATION.md) ·
 [Potential NVFlare core hook](NVFLARE_HOOK_PROPOSAL.md)
@@ -22,7 +23,7 @@ authorization integration.
 
 | Piece | Implementation |
 | --- | --- |
-| Researcher-side Policy Fabric connection | `PolicyFabricCapabilityProvider` calls the existing registry and `InferenceGuardianActionRunner.mint_capability()`, including readiness and policy evaluation. |
+| Researcher-side Policy Fabric connection | `PolicyFabricCapabilityProvider` calls the registry and `InferenceGuardianActionRunner.mint_capability()`, preserving session-key credential checks and policy evaluation over the selected role wallets. |
 | Capability routing | NVFlare registration carries `client.site_config.asset_did`; the server reads `Client.get_site_config()`. |
 | Guardian connection | `GuardianClient(mode="pdo")` uses the real inference Guardian's envelope/decision contract. Explicit `mode="mock"` retains local testing. |
 | Recipe submission | Example-local `PolicyProdEnv(before_submit=...)`; preparation runs after export and before standard submission. |
@@ -123,15 +124,23 @@ Copy [policy-client.example.json](policy-client.example.json) and replace all
 placeholders with existing identities. Each target names a data `asset_did`, an
 NVFlare client `app_name`, and role wallets. `Script` is the **identity of the
 approved application archive**, while `User` is the requester if the site's
-policy requires it. Add `params.project` if required by policy. Do not put
-`script_digest` in this config; it is always measured from the frozen archive.
+policy requires it. Requirements must be represented by the credentials the
+selected policy understands. Target fields other than `asset_did`, `app_name`
+and `wallets` are rejected, including former `params.project` or configured
+`script_digest` values. The archive digest is always measured from its bytes.
 Every frozen client app must have a target, and every participating data asset
 must have its appropriate target.
 
 The provider resolves asset metadata via `registry_client.get_asset_by_did()`,
 uses `action_runners.build_runner()`, and calls the inference runner's
-`mint_capability()`. That preserves upstream readiness checks and
-`pdo_runner.create_capability(request={"script_digest": ...})`. A refusal aborts
+`mint_capability()`. That preserves upstream session-key credential checks and
+`pdo_runner.create_capability(wallet_ids=..., token_id=..., user_name=...)`.
+The policy takes its authorized digest from the selected Script wallet's
+`ScriptHashCredential`; this API does not accept a measured digest or request
+parameters. The provider validates the frozen app/digest inventory, but does
+not inspect the encrypted operation or confirm its digest at issuance. A stale
+or wrong Script credential therefore causes rejection at the site's Guardian.
+A credential or policy refusal aborts
 the submission; there is no mock fallback. The encrypted capability envelope is
 base64-encoded for metadata transport. Only the Guardian opens its operation.
 The site's Guardian endpoint is configured locally, not taken from registry or
@@ -139,8 +148,10 @@ job metadata.
 
 ### Approve the exact archive before submitting
 
-The new inference delivery policy requires a trusted **`ScriptHashCredential`**
-whose `scriptHash` equals `request.script_digest`. A credential for a Python
+The selected inference policy must produce a `do_inference` operation carrying
+the digest from a trusted **`ScriptHashCredential`**. Its `scriptHash` must equal
+the frozen archive's `sha256:<hex>` value. The Guardian enforces that equality
+against the site's measurement before deployment. A credential for a Python
 source file does not authorize the ZIP containing that file. Signatures and ZIP
 metadata affect the digest too. A fresh Recipe execution can produce new bytes;
 never assume that an earlier approval covers a re-export.
@@ -158,7 +169,7 @@ For an asynchronous code-review/approval process, use the two-stage preparation:
 2. Retain each `app_*/policy_payload.zip` and the printed `sha256:` digest.
    Use the Policy Fabric **Script identity** for that archive. Have a trusted
    authority review those bytes and issue the Script digest credential to that
-   identity, following the [inference tutorial's authority flow](../../../docs/docs/tutorial_inference.md#22-sign-the-script-digest).
+   identity, following the [inference tutorial's issuer flow](../../../docs/docs/tutorial_inference.md#22-issue-the-scripthashcredential).
    Supply the other credentials required by the site's selected policy cards.
    For distinct app archives, use appropriately approved Script identities.
 
@@ -177,8 +188,10 @@ For an asynchronous code-review/approval process, use the two-stage preparation:
    submission.
 
 `PolicyJobPreparation.freeze(job_dir)` and `.authorize(job_dir)` expose the same
-steps in Python. The single submission hook is appropriate when the installed
-client/issuer can satisfy approval for the newly frozen bytes during that call.
+steps in Python. **Use this two-stage flow for real credential-based approval.**
+The one-call hook is useful for the mock demo or a custom provider that arranges
+approval for newly frozen bytes during the callback. The shipped main-branch
+provider only mints from credentials already present in the selected wallets.
 The integration does not create trusted Script credentials or bypass review.
 No Policy Fabric toy FL server or script-fetching flow is used to submit NVFlare jobs.
 

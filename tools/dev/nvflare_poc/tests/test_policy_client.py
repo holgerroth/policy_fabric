@@ -39,17 +39,13 @@ def upstream_runner(monkeypatch):
     monkeypatch.setitem(sys.modules, prefix, package)
     calls = []
 
-    def issue(**kwargs):
-        calls.append(kwargs)
+    def issue(*, wallet_ids, token_id, user_name):
+        # Match main's API exactly: no request/digest parameter is accepted.
+        calls.append({"wallet_ids": wallet_ids, "token_id": token_id, "user_name": user_name})
         return ENVELOPE, {}
 
     for name, attrs in {
-        "pdo_runner": {"create_capability": issue},
-        "readiness": {
-            "assess": lambda *a: {"trusted": [], "needs_project": False, "rows": []},
-            "obtain": lambda *a: [],
-        },
-        "checklist": {"ready": lambda rows: True},
+        "pdo_runner": {"create_capability": issue, "ensure_public_key_credential": lambda *a: []},
         "registry_client": {},
         "session_keys": {},
         "did_utils": {"parse_did": lambda value: (value.removeprefix("did:pdo:"), None)},
@@ -83,13 +79,12 @@ def provider(**changes):
         "asset_did": "did:pdo:data-asset",
         "app_name": "app",
         "wallets": {"Script": "archive-identity", "User": "researcher-wallet"},
-        "params": {"project": "approved-project"},
     }
     target.update(changes)
     return PolicyFabricCapabilityProvider(user_name="researcher", targets=[target])
 
 
-def test_actual_upstream_runner_receives_archive_digest_and_roles(upstream_runner):
+def test_actual_upstream_runner_uses_role_credentials_without_request_params(upstream_runner):
     _, _, calls = upstream_runner
     bundle = provider()({"app": DIGEST})
     assert json.loads(base64.b64decode(bundle["did:pdo:data-asset"]["app"])) == ENVELOPE
@@ -98,7 +93,6 @@ def test_actual_upstream_runner_receives_archive_digest_and_roles(upstream_runne
             "wallet_ids": {"Script": "archive-identity", "User": "researcher-wallet"},
             "token_id": "token-contract",
             "user_name": "researcher",
-            "request": {"project": "approved-project", "script_digest": DIGEST},
         }
     ]
 
@@ -130,9 +124,10 @@ def test_missing_target_or_invalid_measurement_fails_before_client_load(digests,
         provider()(digests)
 
 
-def test_config_cannot_override_measured_digest():
-    with pytest.raises(ValueError, match="measured"):
-        provider(params={"script_digest": "forged"})
+@pytest.mark.parametrize("changes", [{"params": {"project": "old-project"}}, {"script_digest": "forged"}])
+def test_unsupported_request_settings_are_not_silently_ignored(changes):
+    with pytest.raises(ValueError, match="Unsupported target fields"):
+        provider(**changes)
 
 
 def test_required_script_identity_is_not_fabricated():
@@ -140,10 +135,13 @@ def test_required_script_identity_is_not_fabricated():
         provider(wallets={"User": "researcher-wallet"})
 
 
-def test_missing_readiness_stops_issuance(upstream_runner, monkeypatch):
+def test_credential_failure_stops_issuance(upstream_runner, monkeypatch):
     runners, _, calls = upstream_runner
-    monkeypatch.setattr(runners.checklist, "ready", lambda _: False)
-    monkeypatch.setattr(runners.readiness, "describe_blockers", lambda _: "trusted approval missing", raising=False)
-    with pytest.raises(ValueError, match="Not ready"):
+
+    def refuse(*args):
+        raise ValueError("required credential unavailable")
+
+    monkeypatch.setattr(runners.pdo_runner, "ensure_public_key_credential", refuse)
+    with pytest.raises(ValueError, match="required credential unavailable"):
         provider()({"app": DIGEST})
     assert calls == []

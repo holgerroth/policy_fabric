@@ -94,7 +94,8 @@ class PolicyJobPreparation:
     capability provider receives {app_name: digest} after freezing and returns
     {asset_did: {app_name: opaque_capability}}. ``freeze`` and ``authorize`` can
     also be called separately when exact archive bytes need external approval.
-    ``digests`` records the latest successful authorization for local reporting.
+    ``digests`` records the measured archives after capability attachment; it is
+    not proof that an encrypted capability authorizes them. The site verifies that.
     """
 
     def __init__(self, startup_kit_location, *, mock_asset_dids=(), capability_provider=None):

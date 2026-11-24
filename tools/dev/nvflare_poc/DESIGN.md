@@ -1,9 +1,10 @@
 # Policy Fabric × NVFlare integration design
 
-Updated **2026-11-09**. Integration branch based on MLCommons
-[`authorities@31776f3`](https://github.com/mlcommons/policy_fabric/commit/31776f3df799047d001067271a1155e21bda1cc4),
-which includes `inference-guardian` plus the new authority and request APIs.
-NVFlare compatibility baseline: **2.9.0**.
+Updated **2026-11-24**. Integration branch based on consolidated MLCommons
+[`main@d1fddd7`](https://github.com/mlcommons/policy_fabric/commit/d1fddd767e37b019df965b6bd707b3d9d473c96f).
+Capability issuance uses role credentials; the former `authorities` branch's
+request-digest and readiness APIs are not part of this version.
+NVFlare: **2.9.0** for the original CPU demo; **2.9.1** for MONAI/H100 validation.
 
 ## Overview
 
@@ -13,8 +14,9 @@ that application before running it.**
 1. The researcher exports a normal Recipe. The integration signs and freezes
    each client application as a ZIP and computes its SHA-256 digest.
 2. The installed Policy Fabric client asks the data asset's policy for a
-   capability. Policy Fabric checks the supplied evidence, including a trusted
-   credential approving that exact ZIP digest, and issues the capability.
+   capability using the selected role wallets. Policy Fabric checks their
+   credentials and carries the credential-approved digest into the capability.
+   A trusted issuer must first issue the Script credential for the frozen ZIP.
 3. NVFlare distributes the frozen application and capability. Each site measures
    the received ZIP and asks its configured Guardian to verify the capability
    against that measurement. Only an explicit matching allow, followed by native
@@ -66,8 +68,8 @@ Discussion points:
 | Responsibility | Policy Fabric component | NVFlare component / integration |
 | --- | --- | --- |
 | Discover the data asset and its policy token | `registry_client.get_asset_by_did()`; asset `metadata.policy_contract` | Site advertises `client.site_config.asset_did`; router reads `Client.get_site_config()`. |
-| Check required evidence and request authorization | `InferenceGuardianActionRunner`; `readiness`; `pdo_runner.create_capability(request=...)` | `PolicyFabricCapabilityProvider` supplies the exact archive digest and selected role wallets. |
-| Approve the artifact digest | Trusted `ScriptHashCredential`; inference delivery policy compares `scriptHash` with `request.script_digest` | `PolicyJobPreparation` signs/freezes once; `job_hash.py` measures bytes. |
+| Check required evidence and request authorization | `InferenceGuardianActionRunner`; session-key credential checks; `pdo_runner.create_capability()` over role wallets | `PolicyFabricCapabilityProvider` resolves the asset and supplies the selected role wallets. |
+| Approve the artifact digest | Trusted `ScriptHashCredential`; inference policy carries `scriptHash` into `do_inference`; Guardian compares it with the measured digest | `PolicyJobPreparation` signs/freezes once; `job_hash.py` measures bytes. |
 | Evaluate policy and issue capability | `rego_policy_agent` and `rego_token` via PDO | Capability transported in job metadata; no policy evaluation in NVFlare. |
 | Validate capability and measured digest | PDO Guardian framework and `InferenceOperation` (`do_inference`) | `GuardianClient(mode="pdo")` sends capability + local measurement. |
 | Enforce before execution | Explicit allow response | `PolicySecurityHandler` for early metadata denial; `PolicyAppDeployer` for the byte check; normal native checks follow. |
@@ -96,8 +98,8 @@ env = PolicyProdEnv(
 run = recipe.execute(env)
 ```
 
-The new delivery rule accepts **only a digest covered by a trusted Script
-credential**. It is not permission for a requester to authorize arbitrary bytes
+The inference policy obtains the digest from a **trusted Script credential**.
+It is not permission for a requester to authorize arbitrary bytes
 by naming their hash. The `Script` role identifies the approved ZIP, including
 configuration and signing artifacts. A credential for `client.py` alone is not
 a credential for that ZIP.
@@ -108,8 +110,11 @@ If approval requires an external review, use the supported two-stage path:
 The existing frozen ZIPs survive the wait unchanged. Calling `recipe.execute()`
 after approval would create another export and may invalidate the digest.
 The [README](README.md#approve-the-exact-archive-before-submitting) gives commands.
-The one-call hook is suitable when the client/issuer can satisfy approval during
-that call. This integration does not automatically issue trusted digest credentials.
+Use the two-stage path with the main-branch provider: it consumes existing
+credentials and does not compare the measured ZIP digest during issuance.
+A stale credential is rejected at the site. The one-call hook suits explicit
+mock issuance or a custom provider that arranges approval during the callback.
+This integration does not automatically issue trusted digest credentials.
 
 The [upstream hook proposal](NVFLARE_HOOK_PROPOSAL.md) remains a potential
 NVFlare core contribution. `before_submit` is **not stock `ProdEnv` functionality**;
@@ -205,12 +210,16 @@ require separate native/runtime controls or additional policy requirements.
 The provider calls the existing inference runner with:
 
 ```python
-params={"script_digest": measured_zip_digest, "project": optional_project}
 wallets={"Script": archive_identity, "User": requester_wallet_if_required}
 ```
 
-The runner resolves readiness and requests a policy decision before token
-issuance. Config cannot override the measured digest. The provider returns
+The runner performs session-key credential checks and requests a policy decision
+over the selected role credentials before token issuance. The authorized digest
+comes from `ScriptHashCredential`, not a request parameter. The provider rejects
+old `params` settings and configured digests instead of silently ignoring them.
+It validates the frozen app/digest inventory, but the encrypted capability's
+digest is checked only by the site Guardian against the measured ZIP.
+The provider returns
 `{asset_did: {app_name: base64_encoded_capability_envelope}}`. It does not decrypt
 the operation, invent evidence, fetch a Python script, or use Policy Fabric's
 toy FL server. NVFlare supplies and distributes its own application artifact.
@@ -271,7 +280,9 @@ post-deployment integrity are separate enforcement concerns.
 The original PoC and its local design work were checkpointed on
 `feat/nvflare-policyfactory-poc` at `e7cb922` before migration. This branch starts
 from the new repository's history and carries only the integration example and
-its documentation forward. The earlier validation and issue draft remain as
+its documentation forward. On 2026-11-24, the two integration commits were
+rebased onto consolidated `main`; the former authorities-based version is
+preserved on `feat/nvflare-authorities-20261124`. The earlier validation and issue draft remain as
 explicitly labeled historical records.
 
 ## First application PoC

@@ -89,8 +89,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
   <!-- The installed Policy Fabric client mediates the issuer exchange. -->
   <path d="M 200 390 V 450" class="edge"/>
-  <text x="180" y="411" text-anchor="end" class="small">Digest +</text>
-  <text x="180" y="434" text-anchor="end" class="small">request</text>
+  <text x="180" y="411" text-anchor="end" class="small">Role</text>
+  <text x="180" y="434" text-anchor="end" class="small">wallets</text>
   <path d="M 360 450 V 390" class="decision-edge"/>
   <text x="378" y="425" class="small">Capability</text>
 
@@ -100,7 +100,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
   <text x="102" y="538" class="small">InferenceGuardianActionRunner</text>
 
   <path d="M 480 475 H 650" class="edge"/>
-  <text x="565" y="459" text-anchor="middle" class="small">Request</text>
+  <text x="565" y="459" text-anchor="middle" class="small">Credentials</text>
   <path d="M 650 530 H 480" class="decision-edge"/>
   <text x="565" y="514" text-anchor="middle" class="label">Capability</text>
 

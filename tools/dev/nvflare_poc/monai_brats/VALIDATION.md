@@ -21,9 +21,10 @@ exited with code **0**. The final focused test suite passed **64 tests**.
 The [provenance record](validation/provenance.json) contains SHA-256 hashes of
 the source files used by the run and downloaded bundle files. The additional
 packaging regression test and documentation were completed after this run;
-the executed runtime source files are unchanged. The integration remains
-based on upstream `authorities@31776f3`; this work does not change that base
-or validate the complete live PDO stack.
+the executed runtime source files are unchanged for that recorded run. This
+historical validation used upstream `authorities@31776f3`. The subsequent
+[main-branch migration](../VALIDATION.md) has its own validation record; neither
+record establishes a complete live PDO deployment.
 
 Starting points:
 

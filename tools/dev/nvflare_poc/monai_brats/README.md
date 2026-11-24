@@ -111,18 +111,36 @@ set `PF_BRATS_DATA` to its local MSD directory and `PF_BRATS_SPLITS` to the
 directory containing its `<site>.json` split before starting NVFlare. The example
 targets `site_a` and `site_b`; data paths are local configuration, not job inputs.
 
+For real approval, export and freeze the complete bundle application first:
+
 ```bash
 python tools/dev/nvflare_poc/monai_brats/job.py \
   --bundle-root /path/to/brats_mri_segmentation \
   --startup-kit /path/to/admin@example.org \
+  --freeze-only --export-dir /path/to/frozen-jobs
+```
+
+Have the trusted issuer approve each printed ZIP digest in its Script identity's
+`ScriptHashCredential`, including the `sha256:` prefix and the other evidence
+the site's policy requires. Then attach capabilities to that same export:
+
+```bash
+python tools/dev/nvflare_poc/prepare_job.py /path/to/frozen-jobs/monai_brats \
+  --startup-kit /path/to/admin@example.org --authorize-only \
   --policy-client /path/to/policy-client.json
 ```
 
-Use `--mock` instead of `--policy-client` only with explicitly configured mock
-Guardians. The real bridge requires the upstream PDO client environment and
-trusted credentials for the newly frozen archives; that complete live flow
-has not yet been validated. The parent README describes delayed approval
-without re-exporting the approved bytes.
+Submit that directory through the standard NVFlare admin `submit_job` command
+or `Session.submit_job()`. Do not call `recipe.execute()` after approval: it
+would re-export and may change the authorized bytes. Main's capability issuer
+reads the digest from the Script credential, and the Guardian checks it against
+the ZIP received by the site. It does not compare a request digest at issuance.
+
+For one-call mock testing, run `job.py` with `--mock` and explicitly configured
+mock Guardians. The real bridge requires the upstream PDO client environment
+and trusted credentials; the complete live flow has not yet been validated.
+The [parent README](../README.md#approve-the-exact-archive-before-submitting)
+describes the approval lifecycle in detail.
 
 `package_bundle()` copies the bundle configuration and helper code into each
 client application. The Recipe bundles the pretrained checkpoint into the
